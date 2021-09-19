@@ -22,12 +22,17 @@ end
 
 def convert_to_array(t_hash)
   return nil if t_hash.nil?
+  end_date = if t_hash["date_end"] == "0000-00-00 00:00:00"
+               nil
+             else
+               t_hash["date_end"]
+             end
   [
     t_hash['idtournament'].to_i,
     t_hash['name'],
     t_hash['long_name'],
     t_hash['date_start'],
-    t_hash['date_end'],
+    end_date,
     t_hash['questions_total'].to_i,
     t_hash['tournament_in_rating'] == "1" ? true : false
   ]
@@ -54,4 +59,4 @@ def load_batch(from:, to:)
   save_tournaments(tournaments)
 end
 
-load_batch(from: 3000, to: 6000)
+load_batch(from: 7000, to: 7438)
