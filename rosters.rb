@@ -48,7 +48,6 @@ end
 
 def load_batch(from:, to:)
   saved = Set.new(DB[:tournament_rosters].map(:tournament_id))
-  tournaments = []
   (from..to).each do |t_id|
     if saved.include?(t_id)
       puts "#{t_id} already saved"
@@ -59,4 +58,4 @@ def load_batch(from:, to:)
   end
 end
 
-load_batch(from: 6772, to: 7438)
+load_batch(from: 7212, to: 7212)
