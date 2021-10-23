@@ -40,7 +40,7 @@ def deduplicate
   query = <<~QUERY
     with grouped as (
       select id, 
-          row_number() over (partition by player_id, team_id, season_id, start_date, end_date order by id) as row_number
+          row_number() over (partition by player_id, team_id, season_id order by id) as row_number
       from base_rosters
     )
     delete from base_rosters
