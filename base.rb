@@ -1,10 +1,8 @@
 require_relative "db.rb"
 require "httparty"
-require 'set'
 
 def fetch_team(id)
   return nil if id.nil?
-  puts "fetching #{id}"
   response = HTTParty.get("https://api.rating.chgk.net/team_seasons.json?idteam=#{id}")
   if response.code == 200
     response.parsed_response
@@ -35,26 +33,40 @@ def save_players(players)
   DB[:base_rosters].import(columns, players)
 end
 
-def load_batch(team_ids:)
-  saved = Set.new(DB[:base_rosters].map(:team_id))
-  puts "#{saved.size} already saved"
+def deduplicate
   puts DateTime.now
-  players = team_ids.flat_map do |t_id|
-    if saved.include?(t_id)
-      next
-    end
-    rosters = fetch_team(t_id)
-    # next if rosters.nil? || rosters.size == 0
-    next if rosters.nil?
-    rosters.map { |roster| conver t_to_array(roster) }
-  end
-  save_players(players.compact)
+  puts "Starting deduplication"
+
+  query = <<~QUERY
+    with grouped as (
+      select id, 
+          row_number() over (partition by player_id, team_id, season_id, start_date, end_date order by id) as row_number
+      from base_rosters
+    )
+    delete from base_rosters
+    where id in (select id from grouped where row_number > 1);
+  QUERY
+  DB.run(query)
+  puts "Deduplication completed"
 end
 
-def release_top_teams(n: 100)
-  DB.fetch("select team_id from b.releases where release_details_id = 9 order by rating desc limit #{n}")
-    .map(:team_id)
+def fetch_and_load_base_rosters(team_ids:)
+  puts "loading data for #{team_ids.size} teams"
+  puts DateTime.now
+  count = 0
+  players = team_ids.flat_map do |t_id|
+    count += 1
+    if count % 10 == 0
+      puts "team ##{count}"
+    end
+    rosters = fetch_team(t_id)
+    next if rosters.nil?
+    rosters.map { |roster| convert_to_array(roster) }
+  end
+  save_players(players.compact)
+  deduplicate
 end
+
 
 def played_maii_tournaments
   DB.fetch("select rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true")
@@ -62,8 +74,5 @@ def played_maii_tournaments
 end
 
 puts DateTime.now
-load_batch(team_ids: played_maii_tournaments)
+fetch_and_load_base_rosters(team_ids: played_maii_tournaments)
 puts DateTime.now
-
-
-
