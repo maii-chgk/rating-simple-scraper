@@ -1,6 +1,19 @@
 require_relative "db.rb"
 require "httparty"
-require 'set'
+
+MAIN_ROSTERS_TABLE = :tournament_rosters
+TEMP_ROSTERS_TABLE = :tournament_rosters_temp
+
+def create_temp_table
+  DB.create_table? TEMP_ROSTERS_TABLE do
+    primary_key :id
+    column :tournament_id, Integer
+    column :team_id, Integer
+    column :player_id, Integer
+    column :flag, String
+    column :is_captain, TrueClass
+  end
+end
 
 def fetch_tournament_rosters(id)
   puts "fetching #{id}"
@@ -17,7 +30,7 @@ def fetch_tournament_rosters(id)
 rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT
   puts "connection refused, retrying in 3 seconds"
   sleep(3)
-  fetch_tournament_rosters(id)
+  retry
 end
 
 def process_tournament(tournament_id, rosters)
@@ -41,21 +54,39 @@ def process_roster(tournament_id, roster)
 end
 
 def save_rosters(rosters)
-  puts "saving #{rosters.size} players"
   columns = [:tournament_id, :team_id, :player_id, :flag, :is_captain]
-  DB[:tournament_rosters].import(columns, rosters)
+  DB[TEMP_ROSTERS_TABLE].import(columns, rosters)
 end
 
-def load_batch(from:, to:)
-  saved = Set.new(DB[:tournament_rosters].map(:tournament_id))
-  (from..to).each do |t_id|
-    if saved.include?(t_id)
-      puts "#{t_id} already saved"
-      next
-    end
-    rosters = fetch_tournament_rosters(t_id)
-    save_rosters(process_tournament(t_id, rosters))
+def update_main_table(tournament_ids:)
+  DB.transaction do
+    puts "delete from #{MAIN_ROSTERS_TABLE} where tournament_id in (#{tournament_ids.join(',')})"
+    DB.run("delete from #{MAIN_ROSTERS_TABLE} where tournament_id in (#{tournament_ids.join(',')})")
+    puts "insert into #{MAIN_ROSTERS_TABLE} (select * from #{TEMP_ROSTERS_TABLE}"
+    DB.run("insert into #{MAIN_ROSTERS_TABLE} (select * from #{TEMP_ROSTERS_TABLE})")
+    DB.drop_table(TEMP_ROSTERS_TABLE)
   end
 end
 
-load_batch(from: 7212, to: 7212)
+def maii_tournaments
+  DB.fetch("select id from rating_tournament where maii_rating = true and end_datetime <= now() + interval '1 week'")
+    .map(:id)
+end
+
+def fetch_and_save_tournament_rosters(tournament_ids:)
+  create_temp_table
+  puts DateTime.now
+  puts "Fetching and saving rosters for #{tournament_ids.size} tournaments"
+  tournament_ids.each do |t_id|
+    rosters = fetch_tournament_rosters(t_id)
+    puts "Saving #{rosters&.size} rosters for #{t_id}"
+    save_rosters(process_tournament(t_id, rosters))
+  end
+  puts DateTime.now
+  puts "Updating main roster table with updated rosters"
+  update_main_table(tournament_ids: tournament_ids)
+  puts "Update completed"
+  puts DateTime.now
+end
+
+fetch_and_save_tournament_rosters(tournament_ids: maii_tournaments)
