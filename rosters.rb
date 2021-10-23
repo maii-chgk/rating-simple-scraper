@@ -60,9 +60,7 @@ end
 
 def update_main_table(tournament_ids:)
   DB.transaction do
-    puts "delete from #{MAIN_ROSTERS_TABLE} where tournament_id in (#{tournament_ids.join(',')})"
     DB.run("delete from #{MAIN_ROSTERS_TABLE} where tournament_id in (#{tournament_ids.join(',')})")
-    puts "insert into #{MAIN_ROSTERS_TABLE} (select * from #{TEMP_ROSTERS_TABLE}"
     DB.run("insert into #{MAIN_ROSTERS_TABLE} (select * from #{TEMP_ROSTERS_TABLE})")
     DB.drop_table(TEMP_ROSTERS_TABLE)
   end
