@@ -69,7 +69,7 @@ end
 
 
 def played_maii_tournaments
-  DB.fetch("select rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true")
+  DB.fetch("select distinct rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true")
     .map(:team_id)
 end
 
