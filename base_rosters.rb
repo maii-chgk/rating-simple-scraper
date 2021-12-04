@@ -3,7 +3,7 @@ require "httparty"
 
 def fetch_team(id)
   return nil if id.nil?
-  response = HTTParty.get("https://api.rating.chgk.net/team_seasons.json?idteam=#{id}")
+  response = HTTParty.get("https://api.rating.chgk.net/teams/#{id}/seasons.json")
   if response.code == 200
     response.parsed_response
   elsif response.code == 404
