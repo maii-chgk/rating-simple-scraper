@@ -1,5 +1,6 @@
 require_relative "db.rb"
 require "httparty"
+require "honeybadger"
 
 def fetch_team(id)
   return nil if id.nil?
@@ -65,6 +66,9 @@ def fetch_and_load_base_rosters(team_ids:)
   end
   save_players(players.compact)
   deduplicate
+rescue => e
+  Honeybadger.notify(e)
+  raise e
 end
 
 
