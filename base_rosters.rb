@@ -14,6 +14,10 @@ def fetch_team(id)
     puts response.body
     nil
   end
+rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT
+  puts "connection refused, retrying in 3 seconds"
+  sleep(3)
+  retry
 end
 
 def convert_to_array(hash)

@@ -28,7 +28,7 @@ def fetch_tournament_rosters(id)
     puts response.body
     nil
   end
-rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT
+rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT
   puts "connection refused, retrying in 3 seconds"
   sleep(3)
   retry
