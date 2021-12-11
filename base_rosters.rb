@@ -75,12 +75,20 @@ rescue => e
   raise e
 end
 
-
 def played_maii_tournaments
   DB.fetch("select distinct rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true")
     .map(:team_id)
 end
 
-puts DateTime.now
-fetch_and_load_base_rosters(team_ids: played_maii_tournaments)
-puts DateTime.now
+def all_teams
+  max_team_id = DB.fetch("select max(id) from rating_team").map(:max).first + 500
+  p (1..max_team_id).to_a
+end
+
+def load_maii_rosters
+  fetch_and_load_base_rosters(team_ids: played_maii_tournaments)
+end
+
+def load_all_rosters
+  fetch_and_load_base_rosters(team_ids: all_teams)
+end
