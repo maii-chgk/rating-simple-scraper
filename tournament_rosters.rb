@@ -1,6 +1,5 @@
 require_relative "db.rb"
 require "httparty"
-require "honeybadger"
 
 MAIN_ROSTERS_TABLE = :tournament_rosters
 TEMP_ROSTERS_TABLE = :tournament_rosters_temp
@@ -86,9 +85,6 @@ def fetch_and_save_tournament_rosters(tournament_ids:)
   update_main_table(tournament_ids: tournament_ids)
   puts "Update completed"
   puts DateTime.now
-rescue => e
-  Honeybadger.notify(e)
-  raise e
 end
 
 fetch_and_save_tournament_rosters(tournament_ids: maii_tournaments)
