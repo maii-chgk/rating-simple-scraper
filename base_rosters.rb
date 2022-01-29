@@ -1,6 +1,5 @@
 require_relative "db.rb"
 require "httparty"
-require "honeybadger"
 
 def fetch_team(id)
   return nil if id.nil?
@@ -71,12 +70,11 @@ def fetch_and_load_base_rosters(team_ids:)
   save_players(players.compact)
   deduplicate
 rescue => e
-  Honeybadger.notify(e)
   raise e
 end
 
 def played_maii_tournaments
-  DB.fetch("select distinct rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true")
+  DB.fetch("select distinct rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true limit 10")
     .map(:team_id)
 end
 
