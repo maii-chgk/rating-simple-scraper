@@ -1,0 +1,22 @@
+name: Base rosters for teams in MAII tournaments
+
+on:
+  schedule:
+    - cron: '35 */6 * * *'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.6', '2.7', '3.0']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.0
+        bundler-cache: true
+    - name: Run scraper
+      run: bundle exec ruby base_rosters_maii.rb
