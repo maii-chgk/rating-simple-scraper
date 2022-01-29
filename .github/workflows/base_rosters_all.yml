@@ -1,0 +1,20 @@
+name: Base rosters for all teams
+
+on:
+   schedule:
+     - cron: '0 7 * * 7'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+        bundler-cache: true
+    - name: Run scraper
+      run: bundle exec ruby base_rosters_all.rb
+      env:
+        CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
