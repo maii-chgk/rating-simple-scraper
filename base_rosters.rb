@@ -1,6 +1,7 @@
 require_relative "db.rb"
 require "httparty"
-require "honeybadger"
+
+BATCH_SIZE = 50
 
 def fetch_team(id)
   return nil if id.nil?
@@ -32,14 +33,12 @@ def convert_to_array(hash)
 end
 
 def save_players(players)
-  puts DateTime.now
   puts "saving #{players.size} players"
   columns = [:player_id, :team_id, :season_id, :start_date, :end_date]
   DB[:base_rosters].import(columns, players)
 end
 
 def deduplicate
-  puts DateTime.now
   puts "Starting deduplication"
 
   query = <<~QUERY
@@ -57,22 +56,25 @@ end
 
 def fetch_and_load_base_rosters(team_ids:)
   puts "loading data for #{team_ids.size} teams"
-  puts DateTime.now
-  count = 0
+  puts "batch size is #{BATCH_SIZE}"
+  batches_count = (Float(team_ids.size) / BATCH_SIZE).ceil
+  current_batch = 1
+
+  team_ids.each_slice(BATCH_SIZE) do |batch|
+    puts "Processing batch ##{current_batch}/#{batches_count}"
+    fetch_and_load_batch(team_ids: batch)
+    current_batch += 1
+  end
+end
+
+def fetch_and_load_batch(team_ids:)
   players = team_ids.flat_map do |t_id|
-    count += 1
-    if count % 10 == 0
-      puts "team ##{count}"
-    end
     rosters = fetch_team(t_id)
     next if rosters.nil?
     rosters.map { |roster| convert_to_array(roster) }
   end
   save_players(players.compact)
   deduplicate
-rescue => e
-  Honeybadger.notify(e)
-  raise e
 end
 
 def played_maii_tournaments
