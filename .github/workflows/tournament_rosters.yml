@@ -1,4 +1,4 @@
-name: Base rosters for teams in MAII tournaments
+name: Rosters for MAII tournaments
 
 on:
    schedule:
