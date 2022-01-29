@@ -82,7 +82,7 @@ end
 
 def all_teams
   max_team_id = DB.fetch("select max(id) from rating_team").map(:max).first + 500
-  p (1..max_team_id).to_a
+  (1..max_team_id).to_a
 end
 
 def load_maii_rosters
