@@ -57,12 +57,13 @@ end
 def fetch_and_load_base_rosters(team_ids:)
   puts "loading data for #{team_ids.size} teams"
   puts "batch size is #{BATCH_SIZE}"
-  batch_count = 0
+  batches_count = (Float(team_ids.size) / BATCH_SIZE).ceil
+  current_batch = 1
 
   team_ids.each_slice(BATCH_SIZE) do |batch|
-    puts "Processing batch ##{batch_count}/#{team_ids.size / BATCH_SIZE + 1}"
+    puts "Processing batch ##{current_batch}/#{batches_count}"
     fetch_and_load_batch(team_ids: batch)
-    batch_count += 1
+    current_batch += 1
   end
 end
 
@@ -77,7 +78,7 @@ def fetch_and_load_batch(team_ids:)
 end
 
 def played_maii_tournaments
-  DB.fetch("select distinct rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true limit 150")
+  DB.fetch("select distinct rr.team_id from rating_tournament t left join rating_result rr on t.id = rr.tournament_id where maii_rating = true")
     .map(:team_id)
 end
 
