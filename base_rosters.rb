@@ -82,15 +82,11 @@ def played_maii_tournaments
     .map(:team_id)
 end
 
-def all_teams
-  max_team_id = DB.fetch("select max(id) from rating_team").map(:max).first + 500
-  (1..max_team_id).to_a
-end
-
 def load_maii_rosters
   fetch_and_load_base_rosters(team_ids: played_maii_tournaments)
 end
 
-def load_all_rosters
-  fetch_and_load_base_rosters(team_ids: all_teams)
+def load_all_rosters(first_id, last_id)
+  last_id |= DB.fetch("select max(id) from rating_team").map(:max).first + 500
+  fetch_and_load_base_rosters(team_ids: (first_id..last_id).to_a)
 end
