@@ -5,7 +5,7 @@ require_relative '../strategies/temp_table'
 
 class TournamentRostersFetcher < TempTableStrategy
   def main_table_name
-    "rosters_new"
+    "rosters"
   end
 
   def create_table(table_name)
@@ -70,5 +70,3 @@ def maii_tournaments
   DB.fetch("select id from rating_tournament where maii_rating = true and end_datetime <= now() + interval '1 week'")
     .map(:id)
 end
-
-TournamentRostersFetcher.new(ids: maii_tournaments).run
