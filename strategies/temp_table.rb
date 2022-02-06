@@ -3,8 +3,6 @@ class TempTableStrategy
     self.new(data, ids).import
   end
 
-  private
-
   def initialize(data, ids)
     @data = data
     @ids = ids
@@ -16,6 +14,8 @@ class TempTableStrategy
     import_data
     update_main_table
   end
+
+  private
 
   def import_data
     DB[temp_table_name.to_sym].import(columns_to_import, flattened_data)
