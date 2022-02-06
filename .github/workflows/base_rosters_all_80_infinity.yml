@@ -15,6 +15,6 @@ jobs:
         ruby-version: 3.1
         bundler-cache: true
     - name: Run scraper
-      run: bundle exec ruby base_rosters_all_80_inf.rb
+      run: bundle exec ruby runners/base_rosters_all_80_inf.rb
       env:
         CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
