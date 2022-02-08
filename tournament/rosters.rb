@@ -5,7 +5,7 @@ require_relative '../strategies/temp_table'
 
 class TournamentRostersFetcher < TempTableStrategy
   def main_table_name
-    "rosters"
+    "tournament_rosters"
   end
 
   def create_table(table_name)
