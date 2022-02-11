@@ -7,7 +7,7 @@ class TournamentResultsAPI
   end
 
   def fetch_results(tournament_id:)
-    query = "/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=0"
+    query = "/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=1"
     response = self.class.get(query, headers: @headers)
     if response.code == 200
       response.parsed_response

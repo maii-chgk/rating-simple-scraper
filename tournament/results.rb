@@ -37,7 +37,9 @@ class TournamentResultsFetcher
           team_id: team.dig("team", "id"),
           team_title: team.dig("current", "name"),
           total: team["questionsTotal"],
-          position: team["position"]
+          position: team["position"],
+          old_rating: team.dig("rating", "b"),
+          old_rating_delta: team.dig("rating", "d")
         }
       end
     end

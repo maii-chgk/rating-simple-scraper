@@ -9,6 +9,8 @@ class TournamentResultsImporter < TempTableStrategy
       String :team_title
       Integer :total
       Float :position
+      Integer :old_rating
+      Integer :old_rating_delta
     end
   end
 
