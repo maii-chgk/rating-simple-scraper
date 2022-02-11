@@ -24,8 +24,15 @@ class APIClient
   end
 
   def tournament_results(tournament_id:)
-    query = "/tournaments/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=1"
-    fetch(query)
+    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=1")
+  end
+
+  def towns(page:)
+    paged_fetch("/towns?", page)
+  end
+
+  def teams(page:)
+    fetch("/teams?page=#{page}&itemsPerPage=500")
   end
 
   private
