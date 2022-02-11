@@ -15,6 +15,7 @@ class TournamentDetailsImporter < TempTableStrategy
       DateTime :maii_rating_updated_at
       TrueClass :maii_aegis
       DateTime :maii_aegis_updated_at
+      TrueClass :in_old_rating
     end
   end
 
@@ -23,6 +24,6 @@ class TournamentDetailsImporter < TempTableStrategy
   end
 
   def main_table_name
-    :tournaments
+    :tournament_details
   end
 end

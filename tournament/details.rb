@@ -1,4 +1,5 @@
 require "httparty"
+require "date"
 
 require_relative '../importers/tournament_details_importer'
 require_relative '../api/tournaments'
@@ -38,12 +39,16 @@ class TournamentDetailsFetcher
     when :all
       @api_client.all(page: page_number)
     when :recent
-      @api_client.tournaments_started_after(date: nil, page: page_number)
+      @api_client.tournaments_started_after(date: recently, page: page_number)
     when :recently_updated
-      @api_client.tournaments_updated_after(date: nil, page: page_number)
+      @api_client.tournaments_updated_after(date: recently, page: page_number)
     else
       raise ArgumentError, "category should be one of :all, :maii:, :recent, :recently_updated"
     end
+  end
+
+  def recently
+    (Date.today - 180).to_s
   end
 
   def process_data(tournament)
@@ -59,7 +64,8 @@ class TournamentDetailsFetcher
       maii_rating: tournament['maiiRating'],
       maii_rating_updated_at: tournament['maiiRatingUpdatedAt'],
       maii_aegis: tournament['maiiAegis'],
-      maii_aegis_updated_at: tournament['maiiAegisUpdatedAt']
+      maii_aegis_updated_at: tournament['maiiAegisUpdatedAt'],
+      in_old_rating: tournament['tournamentInRatingBalanced']
     }
   end
 end
