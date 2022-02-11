@@ -2,11 +2,11 @@ require "httparty"
 require "date"
 
 require_relative '../importers/tournament_details_importer'
-require_relative '../api/tournaments'
+require_relative '../api/client'
 
 class TournamentDetailsFetcher
   def initialize(category:)
-    @api_client = TournamentsAPI.new
+    @api_client = APIClient.new
     @category = category
     @tournament_ids = []
     @tournaments_data = []
@@ -27,6 +27,8 @@ class TournamentDetailsFetcher
         @tournaments_data << process_data(tournament)
       end
 
+      puts "fetched page #{page_number}"
+
       page_number += 1
       tournaments = fetch_page(page_number)
     end
@@ -37,7 +39,7 @@ class TournamentDetailsFetcher
     when :maii
       @api_client.maii_tournaments(page: page_number)
     when :all
-      @api_client.all(page: page_number)
+      @api_client.all_tournaments(page: page_number)
     when :recent
       @api_client.tournaments_started_after(date: recently, page: page_number)
     when :recently_updated

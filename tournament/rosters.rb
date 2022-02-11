@@ -1,12 +1,12 @@
 require "httparty"
 
 require_relative '../importers/tournament_rosters_importer'
-require_relative '../api/tournament_rosters_legacy'
+require_relative '../api/legacy_client'
 
 class TournamentRostersFetcher
   def initialize(ids:)
     @ids = ids
-    @api_client = TournamentRostersLegacyAPI.new
+    @api_client = LegacyAPIClient.new
     @rosters = []
   end
 

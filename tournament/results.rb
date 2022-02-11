@@ -1,17 +1,17 @@
 require "httparty"
 
 require_relative '../importers/tournament_results_importer'
-require_relative '../api/tournament_detailed'
+require_relative '../api/client'
 
 class TournamentResultsFetcher
   def initialize(ids:)
     @ids = ids
-    @api_client = TournamentResultsAPI.new
+    @api_client = APIClient.new
     @results = []
   end
 
   def run
-    puts "importing rosters for up to #{@ids.size} tournaments"
+    puts "importing results for up to #{@ids.size} tournaments"
     tournaments_data = fetch_tournaments_data
     puts "fetched data for #{tournaments_data.size} tournaments"
 
@@ -25,7 +25,8 @@ class TournamentResultsFetcher
 
   def fetch_tournaments_data
     @ids.each_with_object({}) do |id, hash|
-      hash[id] = @api_client.fetch_results(tournament_id: id)
+      hash[id] = @api_client.tournament_results(tournament_id: id)
+      puts "fetched tournament #{hash.size}" if hash.size % 10 == 0
     end.compact
   end
 

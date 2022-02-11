@@ -1,4 +1,4 @@
-class TournamentRostersLegacyAPI
+class LegacyAPIClient
   include HTTParty
   base_uri 'https://rating.chgk.info/api/tournaments/'
 
@@ -8,6 +8,12 @@ class TournamentRostersLegacyAPI
 
   def fetch_rosters(tournament_id:)
     query = "/#{tournament_id}/recaps"
+    fetch(query)
+  end
+
+  private
+
+  def fetch(query)
     response = self.class.get(query, headers: @headers)
     if response.code == 200
       response.parsed_response
