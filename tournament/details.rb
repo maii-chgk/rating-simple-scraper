@@ -1,12 +1,14 @@
 require "httparty"
 
-require_relative "../db.rb"
 require_relative '../importers/tournament_details_importer'
 require_relative '../api/tournaments'
 
 class TournamentDetailsFetcher
-  def initialize
+  def initialize(category:)
     @api_client = TournamentsAPI.new
+    @category = category
+    @tournament_ids = []
+    @tournaments_data = []
   end
 
   def run
@@ -16,9 +18,7 @@ class TournamentDetailsFetcher
 
   def fetch_tournaments_data
     page_number = 1
-    @tournaments_data = []
-    @tournament_ids = []
-    tournaments = @api_client.maii_tournaments(page: page_number)
+    tournaments = fetch_page(page_number)
 
     while tournaments.size > 0
       tournaments.each do |tournament|
@@ -27,7 +27,22 @@ class TournamentDetailsFetcher
       end
 
       page_number += 1
-      tournaments = @api_client.maii_tournaments(page: page_number)
+      tournaments = fetch_page(page_number)
+    end
+  end
+
+  def fetch_page(page_number)
+    case @category
+    when :maii
+      @api_client.maii_tournaments(page: page_number)
+    when :all
+      @api_client.all(page: page_number)
+    when :recent
+      @api_client.tournaments_started_after(date: nil, page: page_number)
+    when :recently_updated
+      @api_client.tournaments_updated_after(date: nil, page: page_number)
+    else
+      raise ArgumentError, "category should be one of :all, :maii:, :recent, :recently_updated"
     end
   end
 
@@ -48,5 +63,3 @@ class TournamentDetailsFetcher
     }
   end
 end
-
-TournamentDetailsFetcher.new.run

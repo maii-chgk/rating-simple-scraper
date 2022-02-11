@@ -1,58 +1,50 @@
 require "httparty"
 
-require_relative "../db.rb"
-require_relative '../strategies/temp_table'
+require_relative '../importers/tournament_rosters_importer'
+require_relative '../api/tournament_rosters_legacy'
 
-class TournamentRostersFetcher < TempTableStrategy
-  def main_table_name
-    "rosters"
+class TournamentRostersFetcher
+  def initialize(ids:)
+    @ids = ids
+    @api_client = TournamentRostersLegacyAPI.new
+    @rosters = []
   end
 
-  def create_table(table_name)
-    DB.create_table? table_name.to_sym do
-      column :id, "bigserial"
-      Integer :tournament_id
-      Integer :team_id
-      Integer :player_id
-      String :flag
-      TrueClass :is_captain
-    end
+  def run
+    puts "importing rosters for up to #{@ids.size} tournaments"
+    tournaments_data = fetch_tournaments_data
+    puts "fetched data for #{tournaments_data.size} tournaments"
+
+    @rosters = present_rosters(tournaments_data)
+
+    ids_to_update = @rosters.reduce(Set.new) { |ids, roster| ids << roster[:tournament_id] }.to_a
+    puts "importing data for #{ids_to_update.size} tournaments"
+    TournamentRostersImporter.import(data: @rosters, ids: ids_to_update)
+    puts "data imported"
   end
 
-  def columns_to_import
-    [:tournament_id, :team_id, :player_id, :flag, :is_captain]
+  def fetch_tournaments_data
+    @ids.each_with_object({}) do |id, hash|
+      hash[id] = @api_client.fetch_rosters(tournament_id: id)
+    end.compact
   end
 
-  def id_name
-    "tournament_id"
+  def present_rosters(hash)
+    hash.flat_map do |tournament_id, tournament_teams|
+      tournament_teams.flat_map do |team|
+        roster = present_team_roster(team)
+        if roster&.size > 0
+          roster.map { |player| player.update(tournament_id: tournament_id) }
+        else
+          nil
+        end
+      end
+    end.compact
   end
 
-  def fetch_data(id)
-    puts "fetching #{id}"
-    response = HTTParty.get("https://rating.chgk.info/api/tournaments/#{id}/recaps.json")
-    if response.code == 200
-      response.parsed_response
-    elsif response.code == 404
-      puts "#{id} missing"
-      nil
-    else
-      puts response.body
-      nil
-    end
-  rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT
-    puts "connection refused, retrying in 3 seconds"
-    sleep(3)
-    retry
-  end
-
-  def process_data(tournament_id, rosters)
-    return [] if rosters.nil?
-    rosters.flat_map { |roster| process_roster(tournament_id, roster) }
-  end
-
-  def process_roster(tournament_id, roster)
-    team_id = roster["idteam"].to_i
-    roster["recaps"].map do |player|
+  def present_team_roster(team)
+    team_id = team.dig("idteam")
+    team.fetch("recaps", []).map do |player|
       flag = if player["is_base"] == "1"
                "Б"
              elsif player["is_foreign"] == "0"
@@ -60,13 +52,12 @@ class TournamentRostersFetcher < TempTableStrategy
              else
                nil
              end
-      is_captain = player["is_captain"] == "1"
-      [tournament_id, team_id, player["idplayer"].to_i, flag, is_captain]
+      {
+        team_id: team_id,
+        player_id: player["idplayer"],
+        flag: flag,
+        is_captain: player["is_captain"] == "1"
+      }
     end
   end
-end
-
-def maii_tournaments
-  DB.fetch("select id from rating_tournament where maii_rating = true and end_datetime <= now() + interval '1 week'")
-    .map(:id)
 end

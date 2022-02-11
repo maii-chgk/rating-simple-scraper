@@ -1,3 +1,5 @@
+require_relative '../db'
+
 class TempTableStrategy
   def self.import(data:, ids:)
     self.new(data, ids).import
