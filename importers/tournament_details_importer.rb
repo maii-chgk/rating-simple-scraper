@@ -24,6 +24,6 @@ class TournamentDetailsImporter < TempTableStrategy
   end
 
   def main_table_name
-    :tournament_details
+    :tournaments
   end
 end
