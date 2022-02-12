@@ -21,10 +21,11 @@ class TeamsFetcher
 
     while teams.size > 0
       teams.each do |team|
-        @teams_ids << team['id']
+        @teams_ids << team["id"]
         @teams_data << {
-          id: team['id'],
-          title: team['name']
+          id: team["id"],
+          title: team["name"],
+          town_id: team.dig("town", "id")
         }
       end
 
