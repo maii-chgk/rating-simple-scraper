@@ -1,43 +1,23 @@
 require "httparty"
 
 require_relative '../importers/players_importer'
-require_relative '../api/client'
+require_relative './full_fetcher'
 
-class PlayersFetcher
-  def initialize
-    @api_client = APIClient.new
-    @player_ids = []
-    @players_data = []
+class PlayersFetcher < FullFetcher
+  def importer
+    PlayersImporter
   end
 
-  def run
-    fetch_players_data
-    PlayersImporter.import(data: @players_data, ids: @player_ids)
+  def api_method
+    :players
   end
 
-  def fetch_players_data
-    page_number = 1
-    players = fetch_page(page_number)
-
-    while players.size > 0
-      players.each do |player|
-        @player_ids << player['id']
-        @players_data << {
-          id: player['id'],
-          first_name: player['name'],
-          patronymic: player['patronymic'],
-          last_name: player['surname']
-        }
-      end
-
-      puts "fetched page #{page_number}"
-
-      page_number += 1
-      players = fetch_page(page_number)
-    end
-  end
-
-  def fetch_page(page)
-    @api_client.players(page: page)
+  def process_row(player)
+    {
+      id: player['id'],
+      first_name: player['name'],
+      patronymic: player['patronymic'],
+      last_name: player['surname']
+    }
   end
 end
