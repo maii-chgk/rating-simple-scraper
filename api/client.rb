@@ -39,6 +39,10 @@ class APIClient
     fetch("/players?page=#{page}&itemsPerPage=500")
   end
 
+  def seasons
+    fetch("/seasons")
+  end
+
   private
 
   def paged_fetch(query, page)
