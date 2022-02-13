@@ -1,8 +1,8 @@
 require "httparty"
 require "date"
 
-require_relative '../importers/tournament_details_importer'
-require_relative '../api/client'
+require_relative '../../importers/tournament_details_importer'
+require_relative '../../api/client'
 
 class TournamentDetailsFetcher
   def initialize(category:)
