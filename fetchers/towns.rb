@@ -19,3 +19,7 @@ class TownsFetcher < FullFetcher
     }
   end
 end
+
+def fetch_all_towns
+  TownsFetcher.new.run
+end

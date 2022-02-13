@@ -21,3 +21,7 @@ class PlayersFetcher < FullFetcher
     }
   end
 end
+
+def fetch_all_players
+  PlayersFetcher.new.run
+end

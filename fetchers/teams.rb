@@ -20,3 +20,7 @@ class TeamsFetcher < FullFetcher
     }
   end
 end
+
+def fetch_all_teams
+  TeamsFetcher.new.run
+end
