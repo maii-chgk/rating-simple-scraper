@@ -68,6 +68,10 @@ namespace :tournaments do
     TournamentResultsFetcher.new(ids: ids).run
   end
 
+  task :results_for_single_tournament, [:id] do |t, args|
+    TournamentResultsFetcher.new(ids: [args[:id].to_i]).run
+  end
+
   task :rosters_for_all do
     TournamentRostersFetcher.new(ids: all_tournaments).run
   end
@@ -79,6 +83,10 @@ namespace :tournaments do
   task :rosters_for_recent, [:days] do |t, args|
     ids = recent_tournaments(days: args[:days].to_i)
     TournamentRostersFetcher.new(ids: ids).run
+  end
+
+  task :rosters_for_single_tournament, [:id] do |t, args|
+    TournamentRostersFetcher.new(ids: [args[:id].to_i]).run
   end
 end
 

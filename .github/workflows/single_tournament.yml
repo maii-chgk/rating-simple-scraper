@@ -1,0 +1,29 @@
+name: Single tournament
+
+on:
+  workflow_dispatch:
+    inputs:
+      id:
+        description: ID of the tournament to be updated
+        required: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+
+      - name: Fetch results
+        run: bundle exec rake tournaments:results_for_single_tournament[${{ github.event.inputs.id }}]
+        env:
+          CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
+
+      - name: Fetch rosters
+        run: bundle exec rake tournaments:rosters_for_single_tournament[${{ github.event.inputs.id }}]
+        env:
+          CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
