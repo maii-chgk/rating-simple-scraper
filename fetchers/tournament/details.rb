@@ -50,7 +50,7 @@ class TournamentDetailsFetcher
   end
 
   def recently
-    (Date.today - 180).to_s
+    (Date.today - 30).to_s
   end
 
   def process_data(tournament)
