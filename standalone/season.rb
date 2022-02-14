@@ -39,5 +39,3 @@ class SeasonsImporter
     DB[:seasons].import([:id, :start, :end], @seasons)
   end
 end
-
-SeasonsImporter.new.run

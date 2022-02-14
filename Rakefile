@@ -3,6 +3,10 @@ require_relative './fetchers/towns'
 require_relative './fetchers/teams'
 require_relative './fetchers/players'
 require_relative './fetchers/base_rosters'
+require_relative './fetchers/tournament/details'
+require_relative './fetchers/tournament/results'
+require_relative './fetchers/tournament/rosters'
+require_relative './standalone/season'
 
 namespace :towns do
   task :fetch_all do
@@ -35,5 +39,51 @@ namespace :base_rosters do
 end
 
 namespace :tournaments do
+  task :details_for_all_tournaments do
+    TournamentDetailsFetcher.new(category: :all).run
+  end
 
+  task :details_for_rating_tournaments do
+    TournamentDetailsFetcher.new(category: :maii).run
+  end
+
+  task :details_for_recent_tournaments do
+    TournamentDetailsFetcher.new(category: :recent).run
+  end
+
+  task :details_for_recently_updated_tournaments do
+    TournamentDetailsFetcher.new(category: :recently_updated).run
+  end
+
+  task :results_for_all do
+    TournamentResultsFetcher.new(ids: all_tournaments).run
+  end
+
+  task :results_for_rating do
+    TournamentResultsFetcher.new(ids: rating_tournaments).run
+  end
+
+  task :results_for_recent, [:days] do |t, args|
+    ids = recent_tournaments(days: args[:days].to_i)
+    TournamentResultsFetcher.new(ids: ids).run
+  end
+
+  task :rosters_for_all do
+    TournamentRostersFetcher.new(ids: all_tournaments).run
+  end
+
+  task :rosters_for_rating do
+    TournamentRostersFetcher.new(ids: rating_tournaments).run
+  end
+
+  task :rosters_for_recent, [:days] do |t, args|
+    ids = recent_tournaments(days: args[:days].to_i)
+    TournamentRostersFetcher.new(ids: ids).run
+  end
+end
+
+namespace :seasons do
+  task :fetch_all do
+    SeasonsImporter.new.run
+  end
 end
