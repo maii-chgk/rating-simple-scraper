@@ -1,8 +1,6 @@
-name: Base rosters for IDs 40001–80000
+name: Rosters for all tournaments
 
-on:
-  schedule:
-    - cron: '0 7 * * MON'
+on: workflow_dispatch
 
 jobs:
   run:
@@ -15,6 +13,6 @@ jobs:
         ruby-version: 3.1
         bundler-cache: true
     - name: Run scraper
-      run: bundle exec rake base_rosters:fetch_id_range[40001,80000]
+      run: bundle exec rake tournaments:rosters_for_all
       env:
         CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}

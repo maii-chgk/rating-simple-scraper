@@ -1,0 +1,21 @@
+name: Teams
+
+on:
+  schedule:
+    - cron: '30 15 * * *'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+
+      - name: Fetch all teams
+        run: bundle exec rake teams:fetch_all
+        env:
+          CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}

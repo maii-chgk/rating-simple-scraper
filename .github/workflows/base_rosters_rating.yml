@@ -1,8 +1,8 @@
-name: Base rosters for IDs 40001–80000
+name: Base rosters for teams in MAII tournaments
 
 on:
-  schedule:
-    - cron: '0 7 * * MON'
+   schedule:
+     - cron: '35 */6 * * *'
 
 jobs:
   run:
@@ -15,6 +15,6 @@ jobs:
         ruby-version: 3.1
         bundler-cache: true
     - name: Run scraper
-      run: bundle exec rake base_rosters:fetch_id_range[40001,80000]
+      run: bundle exec rake base_rosters:fetch_for_teams_in_rating_tournaments
       env:
         CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
