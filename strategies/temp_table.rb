@@ -11,6 +11,8 @@ class TempTableStrategy
   end
 
   def import
+    return if @data.size == 0 || @ids.size == 0
+
     create_main_table
     create_temp_table
     import_data
