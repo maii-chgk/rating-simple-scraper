@@ -1,0 +1,29 @@
+name: Players, towns, and teams
+
+on: workflow_dispatch
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+
+      - name: Fetch all towns
+        run: bundle exec rake towns:fetch_all
+        env:
+          CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
+
+      - name: Fetch all teams
+        run: bundle exec rake teams:fetch_all
+        env:
+          CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
+
+      - name: Fetch all players
+        run: bundle exec rake players:fetch_all
+        env:
+          CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
