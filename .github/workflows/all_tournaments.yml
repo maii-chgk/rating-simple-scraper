@@ -1,4 +1,4 @@
-name: Rosters for all tournaments
+name: Details for all tournaments
 
 on: workflow_dispatch
 
