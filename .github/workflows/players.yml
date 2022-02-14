@@ -1,0 +1,21 @@
+name: Players, teams, and towns
+
+on:
+  schedule:
+    - cron: '30 10 * * *'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+
+      - name: Fetch all players
+        run: bundle exec rake players:fetch_all
+        env:
+          CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
