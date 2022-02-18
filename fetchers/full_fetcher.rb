@@ -6,6 +6,8 @@ require_relative '../api/client'
 class FullFetcher
   # Goes through all available pages for a resource
 
+  BATCH_SIZE = 100
+
   def initialize
     @api_client = APIClient.new
     @ids = []
@@ -25,22 +27,16 @@ class FullFetcher
   end
 
   def run
-    fetch_data
-    puts "importing #{@ids.size} entries"
-    importer.import(data: @data, ids: @ids)
-  end
-
-  def fetch_data
     page_number = 1
     entries = fetch_page(page_number)
 
     while entries.size > 0
-      entries.each do |entry|
-        @ids << entry["id"]
-        @data << process_row(entry)
-      end
-
       puts "fetched page #{page_number}"
+
+      ids = entries.map { |entry| entry["id"]}
+      data = entries.map { |entry| process_row(entry) }
+      importer.import(data: data, ids: ids)
+      puts "imported #{ids.size} rows"
 
       page_number += 1
       entries = fetch_page(page_number)
