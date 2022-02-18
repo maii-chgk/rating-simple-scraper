@@ -24,7 +24,7 @@ class SeasonsImporter
   end
 
   def create_table
-    db.create_table? :seasons do
+    DB.create_table? :seasons do
       Integer :id
       Date :start
       Date :end
@@ -32,10 +32,10 @@ class SeasonsImporter
   end
 
   def truncate_table
-    db[:seasons].truncate
+    DB[:seasons].truncate
   end
 
   def insert_data
-    db[:seasons].import([:id, :start, :end], @seasons)
+    DB[:seasons].import([:id, :start, :end], @seasons)
   end
 end

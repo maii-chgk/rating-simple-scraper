@@ -2,7 +2,7 @@ require_relative '../strategies/temp_table'
 
 class BaseRostersImporter < TempTableStrategy
   def create_table(table_name)
-    db.create_table? table_name.to_sym do
+    DB.create_table? table_name.to_sym do
       column :id, "bigserial"
       Integer :team_id
       Integer :player_id

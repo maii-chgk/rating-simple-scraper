@@ -22,7 +22,7 @@ class TempTableStrategy
   private
 
   def import_data
-    db[temp_table_name.to_sym].import(columns_to_import, flattened_data)
+    DB[temp_table_name.to_sym].import(columns_to_import, flattened_data)
   end
 
   def columns_to_import
@@ -43,10 +43,10 @@ class TempTableStrategy
 
   def update_main_table
     inserted_columns = columns_to_import.join(',')
-    db.transaction do
-      db.run("delete from #{main_table_name} where #{id_name} in (#{@ids.join(',')})")
-      db.run("insert into #{main_table_name} (#{inserted_columns}) (select #{inserted_columns} from #{temp_table_name})")
-      db.drop_table(temp_table_name)
+    DB.transaction do
+      DB.run("delete from #{main_table_name} where #{id_name} in (#{@ids.join(',')})")
+      DB.run("insert into #{main_table_name} (#{inserted_columns}) (select #{inserted_columns} from #{temp_table_name})")
+      DB.drop_table(temp_table_name)
     end
   end
 

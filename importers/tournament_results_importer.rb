@@ -2,7 +2,7 @@ require_relative '../strategies/temp_table'
 
 class TournamentResultsImporter < TempTableStrategy
   def create_table(table_name)
-    db.create_table? table_name.to_sym do
+    DB.create_table? table_name.to_sym do
       column :id, "bigserial"
       Integer :tournament_id
       Integer :team_id

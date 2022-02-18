@@ -2,7 +2,7 @@ require_relative '../strategies/temp_table'
 
 class TournamentDetailsImporter < TempTableStrategy
   def create_table(table_name)
-    db.create_table? table_name.to_sym do
+    DB.create_table? table_name.to_sym do
       Integer :id
       String :title
       DateTime :start_datetime
