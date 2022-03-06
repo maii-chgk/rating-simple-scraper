@@ -48,6 +48,8 @@ class TempTableStrategy
       DB.run("insert into #{main_table_name} (#{inserted_columns}) (select #{inserted_columns} from #{temp_table_name})")
       DB.drop_table(temp_table_name)
     end
+  rescue Sequel::DatabaseError
+    DB.drop_table(temp_table_name)
   end
 
   def temp_table_name
