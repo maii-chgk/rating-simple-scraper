@@ -32,6 +32,7 @@ class TournamentResultsFetcher
 
   def present_results(hash)
     hash.flat_map do |tournament_id, tournament_results|
+      next if tournament_results.is_a?(String)
       tournament_results.flat_map do |team|
         {
           tournament_id: tournament_id,
@@ -43,6 +44,6 @@ class TournamentResultsFetcher
           old_rating_delta: team.dig("rating", "d")
         }
       end
-    end
+    end.compact
   end
 end
