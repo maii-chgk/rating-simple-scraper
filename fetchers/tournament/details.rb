@@ -59,7 +59,7 @@ class TournamentDetailsFetcher
       title: tournament['name'],
       start_datetime: tournament['dateStart'],
       end_datetime: tournament['dateEnd'],
-      updated_at: tournament['lastEditDate'],
+      last_edited_at: tournament['lastEditDate'],
       questions_count: tournament['questionQty']&.values&.sum,
       type: tournament.dig('type', 'name'),
       typeoft_id: tournament.dig('type', 'id'),
