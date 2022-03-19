@@ -16,6 +16,7 @@ class TournamentDetailsImporter < TempTableStrategy
       TrueClass :maii_aegis
       DateTime :maii_aegis_updated_at
       TrueClass :in_old_rating
+      DateTime :updated_at
     end
   end
 

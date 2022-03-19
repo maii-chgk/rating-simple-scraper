@@ -11,6 +11,7 @@ class TournamentResultsImporter < TempTableStrategy
       Float :position
       Integer :old_rating
       Integer :old_rating_delta
+      DateTime :updated_at
     end
   end
 

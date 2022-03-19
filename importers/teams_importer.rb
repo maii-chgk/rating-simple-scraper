@@ -6,6 +6,7 @@ class TeamsImporter < TempTableStrategy
       Integer :id
       String :title
       Integer :town_id
+      DateTime :updated_at
     end
   end
 

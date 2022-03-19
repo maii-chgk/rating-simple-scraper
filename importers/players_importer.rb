@@ -7,6 +7,7 @@ class PlayersImporter < TempTableStrategy
       String :first_name
       String :patronymic
       String :last_name
+      DateTime :updated_at
     end
   end
 

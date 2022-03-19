@@ -5,6 +5,7 @@ class TownsImporter < TempTableStrategy
     DB.create_table? table_name.to_sym do
       Integer :id
       String :title
+      DateTime :updated_at
     end
   end
 

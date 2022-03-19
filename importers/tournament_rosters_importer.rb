@@ -9,6 +9,7 @@ class TournamentRostersImporter < TempTableStrategy
       Integer :player_id
       String :flag
       TrueClass :is_captain
+      DateTime :updated_at
     end
   end
 

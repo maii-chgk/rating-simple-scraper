@@ -9,6 +9,7 @@ class BaseRostersImporter < TempTableStrategy
       Integer :season_id
       Date :start_date
       Date :end_date
+      DateTime :updated_at
     end
   end
 
