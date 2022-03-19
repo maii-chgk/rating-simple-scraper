@@ -1,8 +1,8 @@
-name: Base rosters for teams in MAII tournaments
+name: Base rosters for teams in rating tournaments
 
 on:
    schedule:
-     - cron: '35 */6 * * *'
+     - cron: '35 0,12,18 * * *'
 
 jobs:
   run:

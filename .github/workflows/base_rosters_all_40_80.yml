@@ -2,7 +2,7 @@ name: Base rosters for IDs 40001–80000
 
 on:
   schedule:
-    - cron: '0 7 * * TUE'
+    - cron: '0 3 * * TUE'
 
 jobs:
   run:
