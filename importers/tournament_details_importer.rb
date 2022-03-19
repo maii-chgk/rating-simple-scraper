@@ -7,7 +7,7 @@ class TournamentDetailsImporter < TempTableStrategy
       String :title
       DateTime :start_datetime
       DateTime :end_datetime
-      DateTime :updated_at
+      DateTime :last_edited_at
       Integer :questions_count
       Integer :typeoft_id
       String :type
