@@ -1,8 +1,8 @@
-name: Results for rating tournaments
+name: Rosters for recent tournaments
 
 on:
    schedule:
-     - cron: '35 * * * *'
+     - cron: '40 * * * *'
 
 jobs:
   run:
@@ -15,6 +15,6 @@ jobs:
         ruby-version: 3.1
         bundler-cache: true
     - name: Run scraper
-      run: bundle exec rake tournaments:results_for_recent[14]
+      run: bundle exec rake tournaments:rosters_for_recent[14]
       env:
         CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
