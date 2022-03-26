@@ -1,4 +1,4 @@
-name: Rosters for rating tournaments
+name: Rosters for recent tournaments
 
 on:
    schedule:

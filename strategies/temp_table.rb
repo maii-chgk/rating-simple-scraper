@@ -40,10 +40,14 @@ class TempTableStrategy
 
   def create_temp_table
     create_table(temp_table_name)
+  rescue Sequel::DatabaseDisconnectError
+    retry
   end
 
   def create_main_table
     create_table(main_table_name)
+  rescue Sequel::DatabaseDisconnectError
+    retry
   end
 
   def update_main_table

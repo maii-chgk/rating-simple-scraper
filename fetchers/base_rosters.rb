@@ -1,31 +1,14 @@
 require "httparty"
 
 require_relative '../importers/base_roster_importer'
+require_relative './batch_fetcher'
 require_relative '../api/client'
 
-BATCH_SIZE = 50
 
-class BaseRostersFetcher
-  def initialize(ids:)
-    @ids = ids
-    @api_client = APIClient.new
-  end
-
-  def run
-    puts "importing rosters for up to #{@ids.size} teams"
-
-    puts "batch size is #{BATCH_SIZE}"
-    batches_count = (Float(@ids.size) / BATCH_SIZE).ceil
-    current_batch = 1
-
-    @ids.each_slice(BATCH_SIZE) do |batch|
-      puts "Processing batch ##{current_batch}/#{batches_count}"
-      run_for_batch(team_ids: batch)
-      current_batch += 1
-    end
-  end
-
-  def run_for_batch(team_ids:)
+class BaseRostersFetcher < BatchFetcher
+  def run_for_batch(team_ids)
+    p 'teams_ids'
+    p team_ids
     puts "importing rosters for up to #{team_ids.size} teams"
     rosters_raw = fetch_rosters(team_ids)
     puts "fetched data for #{rosters_raw.size} teams"
