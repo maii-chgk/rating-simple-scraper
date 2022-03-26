@@ -8,6 +8,7 @@ class TournamentRostersFetcher < BatchFetcher
   def initialize(ids:)
     super
     @results = []
+    @api_client = LegacyAPIClient.new
   end
 
   def run_for_batch(tournament_ids)
