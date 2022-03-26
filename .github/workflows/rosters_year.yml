@@ -1,0 +1,22 @@
+name: Rosters for tournaments in the past year
+
+on: workflow_dispatch
+
+#on:
+#   schedule:
+#     - cron: '0 7 * * SUN'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+        bundler-cache: true
+    - name: Run scraper
+      run: bundle exec rake tournaments:rosters_for_recent[365]
+      env:
+        CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}
