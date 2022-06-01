@@ -50,7 +50,7 @@ class TournamentRostersFetcher < BatchFetcher
       {
         team_id: team_id,
         player_id: player.dig("player", "id"),
-        flag: player["flag"] || "Л",
+        flag: player["flag"],
         is_captain: nil
       }
     end
