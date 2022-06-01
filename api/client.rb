@@ -24,7 +24,11 @@ class APIClient
   end
 
   def tournament_results(tournament_id:)
-    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=1")
+    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=0&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=0")
+  end
+
+  def tournament_rosters(tournament_id:)
+    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=1&includeRatingB=0")
   end
 
   def team_rosters(team_id:)

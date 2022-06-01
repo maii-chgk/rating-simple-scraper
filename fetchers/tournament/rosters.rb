@@ -2,13 +2,13 @@ require "httparty"
 
 require_relative '../../importers/tournament_rosters_importer'
 require_relative '../batch_fetcher'
-require_relative '../../api/legacy_client'
+require_relative '../../api/client'
 
 class TournamentRostersFetcher < BatchFetcher
   def initialize(ids:)
     super
     @results = []
-    @api_client = LegacyAPIClient.new
+    @api_client = APIClient.new
   end
 
   def run_for_batch(tournament_ids)
@@ -26,7 +26,8 @@ class TournamentRostersFetcher < BatchFetcher
 
   def fetch_tournaments_data(ids)
     ids.each_with_object({}) do |id, hash|
-      hash[id] = @api_client.fetch_rosters(tournament_id: id)
+      response = @api_client.tournament_rosters(tournament_id: id)
+      hash[id] = response if response.is_a?(Array)
     end.compact
   end
 
@@ -44,20 +45,13 @@ class TournamentRostersFetcher < BatchFetcher
   end
 
   def present_team_roster(team)
-    team_id = team.dig("idteam")
-    team.fetch("recaps", []).map do |player|
-      flag = if player["is_base"] == "1"
-               "Б"
-             elsif player["is_foreign"] == "0"
-               "Л"
-             else
-               nil
-             end
+    team_id = team.dig("team", "id")
+    team.fetch("teamMembers", []).map do |player|
       {
         team_id: team_id,
-        player_id: player["idplayer"],
-        flag: flag,
-        is_captain: player["is_captain"] == "1"
+        player_id: player.dig("player", "id"),
+        flag: player["flag"] || "Л",
+        is_captain: nil
       }
     end
   end
