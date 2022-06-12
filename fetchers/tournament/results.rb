@@ -38,6 +38,7 @@ class TournamentResultsFetcher < BatchFetcher
           tournament_id: tournament_id,
           team_id: team.dig("team", "id"),
           team_title: team.dig("current", "name"),
+          team_city_id: team.dig("current", "town", "id"),
           total: team["questionsTotal"],
           position: team["position"],
           old_rating: team.dig("rating", "b"),

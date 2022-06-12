@@ -7,6 +7,7 @@ class TournamentResultsImporter < TempTableStrategy
       Integer :tournament_id
       Integer :team_id
       String :team_title
+      Integer :team_city_id
       Integer :total
       Float :position
       Integer :old_rating
