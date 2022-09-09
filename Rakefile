@@ -27,9 +27,14 @@ namespace :players do
 end
 
 namespace :base_rosters do
-  task :fetch_id_range, [:first_id, :last_id] do |t, args|
-    last_id = args[:last_id] || max_team_id + 500
+  task :fetch_id_range, [:first_id, :number_of_ids] do |t, args|
+    last_id = if args[:number_of_ids].nil?
+                max_team_id + 500
+              else
+                args[:first_id].to_i + args[:number_of_ids].to_i
+              end
     ids = (args[:first_id].to_i..last_id.to_i).to_a
+    puts "fetching rosters for ids from #{args[:first_id]} to #{last_id}"
     BaseRostersFetcher.new(ids: ids).run
   end
 
