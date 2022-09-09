@@ -8,7 +8,7 @@ jobs:
       max-parallel: 1
       fail-fast: false
       matrix:
-        min_id: [1, 101, 201]
+        min_id: [1, 10001, 20001, 30001]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,6 +18,6 @@ jobs:
         ruby-version: 3.1
         bundler-cache: true
     - name: Run scraper
-      run: bundle exec rake base_rosters:fetch_id_range[${{ matrix.min_id }},100]
+      run: bundle exec rake base_rosters:fetch_id_range[${{ matrix.min_id }},10000]
       env:
         CONNECTION_STRING: ${{ secrets.SIMPLE_SCRAPER_CONNECTION_STRING }}

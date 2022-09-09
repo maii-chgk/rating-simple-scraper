@@ -31,7 +31,7 @@ namespace :base_rosters do
     last_id = if args[:number_of_ids].nil?
                 max_team_id + 500
               else
-                args[:first_id].to_i + args[:number_of_ids].to_i
+                args[:first_id].to_i + args[:number_of_ids].to_i - 1
               end
     ids = (args[:first_id].to_i..last_id.to_i).to_a
     puts "fetching rosters for ids from #{args[:first_id]} to #{last_id}"
