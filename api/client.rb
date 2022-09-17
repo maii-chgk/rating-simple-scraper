@@ -32,7 +32,7 @@ class APIClient
   end
 
   def team_rosters(team_id:)
-    fetch("/teams/#{team_id}/seasons")
+    fetch("/teams/#{team_id}/seasons&itemsPerPage=500")
   end
 
   def towns(page:)
