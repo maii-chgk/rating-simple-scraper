@@ -2,7 +2,7 @@ name: Base rosters for teams in rating tournaments
 
 on:
    schedule:
-     - cron: '35 0,12,18 * * *'
+     - cron: '35 12 * * *'
 
 jobs:
   run:
