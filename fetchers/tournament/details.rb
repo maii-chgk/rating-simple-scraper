@@ -5,6 +5,8 @@ require_relative '../../importers/tournament_details_importer'
 require_relative '../../api/client'
 
 class TournamentDetailsFetcher
+  BLOCKLIST = [8521]
+
   def initialize(category:)
     @api_client = APIClient.new
     @category = category
@@ -23,6 +25,8 @@ class TournamentDetailsFetcher
 
     while tournaments.size > 0
       tournaments.each do |tournament|
+        next if BLOCKLIST.include?(tournament['id'])
+
         @tournament_ids << tournament['id']
         @tournaments_data << process_data(tournament)
       end
