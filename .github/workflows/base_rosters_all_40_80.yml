@@ -13,7 +13,7 @@ jobs:
         min_id: [40001, 50001, 60001, 70001]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
