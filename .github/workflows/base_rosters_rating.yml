@@ -4,6 +4,8 @@ on:
    schedule:
      - cron: '35 12 * * *'
 
+concurrency: base_rosters
+
 jobs:
   run:
     runs-on: ubuntu-latest

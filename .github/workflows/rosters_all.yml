@@ -2,6 +2,8 @@ name: Rosters for all tournaments
 
 on: workflow_dispatch
 
+concurrency: rosters
+
 jobs:
   run:
     runs-on: ubuntu-latest

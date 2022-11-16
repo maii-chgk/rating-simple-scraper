@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 3 * * WED'
 
+concurrency: base_rosters
+
 jobs:
   import_base_rosters:
     runs-on: ubuntu-latest

@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 3 * * MON'
 
+concurrency: base_rosters
+
 jobs:
   import_base_rosters:
     strategy:
