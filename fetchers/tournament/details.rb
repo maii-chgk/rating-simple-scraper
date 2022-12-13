@@ -5,7 +5,7 @@ require_relative '../../importers/tournament_details_importer'
 require_relative '../../api/client'
 
 class TournamentDetailsFetcher
-  BLOCKLIST = [8521]
+  BLOCKLIST = [8521, 8214]
 
   def initialize(category:)
     @api_client = APIClient.new
