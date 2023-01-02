@@ -5,8 +5,6 @@ require_relative '../../importers/tournament_details_importer'
 require_relative '../../api/client'
 
 class TournamentDetailsFetcher
-  BLOCKLIST = [8521, 8214, 8241, 8112]
-
   def initialize(category:)
     @api_client = APIClient.new
     @category = category
@@ -25,7 +23,7 @@ class TournamentDetailsFetcher
 
     while tournaments.size > 0
       tournaments.each do |tournament|
-        next if BLOCKLIST.include?(tournament['id'])
+        next if has_malformed_dates?(tournament)
 
         @tournament_ids << tournament['id']
         @tournaments_data << process_data(tournament)
@@ -36,6 +34,10 @@ class TournamentDetailsFetcher
       page_number += 1
       tournaments = fetch_page(page_number)
     end
+  end
+
+  def has_malformed_dates?(tournament)
+    tournament['start_datetime']&.start_with?('-0001') || tournament['end_datetime']&.start_with?('-0001')
   end
 
   def fetch_page(page_number)
