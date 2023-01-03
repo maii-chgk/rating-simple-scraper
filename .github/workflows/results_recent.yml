@@ -2,7 +2,7 @@ name: Results for recent tournaments
 
 on:
    schedule:
-     - cron: '35 * * * *'
+     - cron: '35 0-22/2 * * *'
 
 concurrency: results
 
