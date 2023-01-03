@@ -37,7 +37,7 @@ class TournamentDetailsFetcher
   end
 
   def has_malformed_dates?(tournament)
-    tournament['start_datetime']&.start_with?('-0001') || tournament['end_datetime']&.start_with?('-0001')
+    tournament['dateStart']&.start_with?('-0001') || tournament['dateEnd']&.start_with?('-0001')
   end
 
   def fetch_page(page_number)
