@@ -1,6 +1,7 @@
 require 'sequel'
 
 connection_string = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
+ENV['PGOPTIONS'] = '-c statement_timeout=60s'
 DB = Sequel.connect(connection_string)
 
 def max_team_id
