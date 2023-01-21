@@ -1,3 +1,4 @@
+require "set"
 require "httparty"
 
 require_relative '../../importers/tournament_results_importer'

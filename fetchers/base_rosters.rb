@@ -1,9 +1,9 @@
+require "set"
 require "httparty"
 
 require_relative '../importers/base_roster_importer'
 require_relative './batch_fetcher'
 require_relative '../api/client'
-
 
 class BaseRostersFetcher < BatchFetcher
   def run_for_batch(team_ids)
