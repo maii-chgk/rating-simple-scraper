@@ -20,4 +20,8 @@ class BaseRostersImporter < TempTableStrategy
   def main_table_name
     :base_rosters
   end
+
+  def self.delete_rosters_for(team_ids:)
+    DB[:base_rosters].where(team_id: team_ids).delete
+  end
 end
