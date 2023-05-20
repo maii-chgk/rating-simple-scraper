@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rapidjson/json_gem'
+
 require_relative 'db'
 require_relative './fetchers/towns'
 require_relative './fetchers/teams'
