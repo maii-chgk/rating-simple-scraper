@@ -45,7 +45,7 @@ namespace :base_rosters do
   end
 end
 
-namespace :tournaments do
+namespace :tournaments do # rubocop:disable Metrics/BlockLength
   task :details_for_all_tournaments do
     TournamentDetailsFetcher.new(category: :all).run
   end

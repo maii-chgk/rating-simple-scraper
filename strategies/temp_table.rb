@@ -56,7 +56,8 @@ class TempTableStrategy
     inserted_columns = [*columns_to_import, :updated_at].join(',')
     DB.transaction do
       DB.run("delete from #{main_table_name} where #{id_name} in (#{@ids.join(',')})")
-      DB.run("insert into #{main_table_name} (#{inserted_columns}) (select #{inserted_columns} from #{temp_table_name})")
+      DB.run("insert into #{main_table_name} (#{inserted_columns})
+              (select #{inserted_columns} from #{temp_table_name})")
     end
   ensure
     DB.drop_table(temp_table_name)

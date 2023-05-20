@@ -26,11 +26,13 @@ class APIClient
   end
 
   def tournament_results(tournament_id:)
-    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=0&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=0")
+    params = 'results?includeTeamMembers=0&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=0'
+    fetch("/tournaments/#{tournament_id}/#{params}")
   end
 
   def tournament_rosters(tournament_id:)
-    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=1&includeRatingB=0")
+    params = 'results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=1&includeRatingB=0'
+    fetch("/tournaments/#{tournament_id}/#{params}")
   end
 
   def team_rosters(team_id:)

@@ -11,7 +11,13 @@ def max_team_id
 end
 
 def teams_that_played_rating_tournaments
-  DB.fetch('select distinct r.team_id from tournaments t left join tournament_results r on t.id = r.tournament_id where maii_rating = true and r.team_id is not null')
+  query = 'select distinct r.team_id
+           from tournaments t
+           left join tournament_results r
+             on t.id = r.tournament_id
+           where maii_rating = true and r.team_id is not null'
+
+  DB.fetch(query)
     .map(:team_id)
 end
 
