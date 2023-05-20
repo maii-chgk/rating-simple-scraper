@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class APIClient
   include HTTParty
   base_uri 'https://api.rating.chgk.net'
@@ -8,11 +10,11 @@ class APIClient
   end
 
   def all_tournaments(page:)
-    paged_fetch("/tournaments?", page)
+    paged_fetch('/tournaments?', page)
   end
 
   def maii_tournaments(page:)
-    paged_fetch("/tournaments?properties.maiiRating=true", page)
+    paged_fetch('/tournaments?properties.maiiRating=true', page)
   end
 
   def tournaments_started_after(date:, page:)
@@ -24,11 +26,13 @@ class APIClient
   end
 
   def tournament_results(tournament_id:)
-    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=0&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=0")
+    params = 'results?includeTeamMembers=0&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=0'
+    fetch("/tournaments/#{tournament_id}/#{params}")
   end
 
   def tournament_rosters(tournament_id:)
-    fetch("/tournaments/#{tournament_id}/results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=1&includeRatingB=0")
+    params = 'results?includeTeamMembers=1&includeMasksAndControversials=0&includeTeamFlags=1&includeRatingB=0'
+    fetch("/tournaments/#{tournament_id}/#{params}")
   end
 
   def team_rosters(team_id:)
@@ -36,7 +40,7 @@ class APIClient
   end
 
   def towns(page:)
-    paged_fetch("/towns?", page)
+    paged_fetch('/towns?', page)
   end
 
   def teams(page:)
@@ -48,7 +52,7 @@ class APIClient
   end
 
   def seasons
-    fetch("/seasons")
+    fetch('/seasons')
   end
 
   private
@@ -58,7 +62,7 @@ class APIClient
   end
 
   def fetch(query)
-    self.class.get("#{query}", headers: @headers).parsed_response
+    self.class.get(query.to_s, headers: @headers).parsed_response
   rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT
     puts "connection refused at #{query}, retrying in 3 seconds"
     sleep(3)

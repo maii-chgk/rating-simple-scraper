@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'db'
 require_relative './fetchers/towns'
 require_relative './fetchers/teams'
@@ -27,7 +29,7 @@ namespace :players do
 end
 
 namespace :base_rosters do
-  task :fetch_id_range, [:first_id, :number_of_ids] do |t, args|
+  task :fetch_id_range, [:first_id, :number_of_ids] do |_t, args|
     last_id = if args[:number_of_ids].nil?
                 max_team_id + 500
               else
@@ -35,7 +37,7 @@ namespace :base_rosters do
               end
     ids = (args[:first_id].to_i..last_id.to_i).to_a
     puts "fetching rosters for ids from #{args[:first_id]} to #{last_id}"
-    BaseRostersFetcher.new(ids: ids).run
+    BaseRostersFetcher.new(ids:).run
   end
 
   task :fetch_for_teams_in_rating_tournaments do
@@ -43,7 +45,7 @@ namespace :base_rosters do
   end
 end
 
-namespace :tournaments do
+namespace :tournaments do # rubocop:disable Metrics/BlockLength
   task :details_for_all_tournaments do
     TournamentDetailsFetcher.new(category: :all).run
   end
@@ -68,12 +70,12 @@ namespace :tournaments do
     TournamentResultsFetcher.new(ids: rating_tournaments).run
   end
 
-  task :results_for_recent, [:days] do |t, args|
+  task :results_for_recent, [:days] do |_t, args|
     ids = recent_tournaments(days: args[:days].to_i)
-    TournamentResultsFetcher.new(ids: ids).run
+    TournamentResultsFetcher.new(ids:).run
   end
 
-  task :results_for_single_tournament, [:id] do |t, args|
+  task :results_for_single_tournament, [:id] do |_t, args|
     TournamentResultsFetcher.new(ids: [args[:id].to_i]).run
   end
 
@@ -85,12 +87,12 @@ namespace :tournaments do
     TournamentRostersFetcher.new(ids: rating_tournaments).run
   end
 
-  task :rosters_for_recent, [:days] do |t, args|
+  task :rosters_for_recent, [:days] do |_t, args|
     ids = recent_tournaments(days: args[:days].to_i)
-    TournamentRostersFetcher.new(ids: ids).run
+    TournamentRostersFetcher.new(ids:).run
   end
 
-  task :rosters_for_single_tournament, [:id] do |t, args|
+  task :rosters_for_single_tournament, [:id] do |_t, args|
     TournamentRostersFetcher.new(ids: [args[:id].to_i]).run
   end
 end

@@ -1,5 +1,6 @@
-require "set"
-require "httparty"
+# frozen_string_literal: true
+
+require 'httparty'
 
 require_relative '../../importers/tournament_rosters_importer'
 require_relative '../batch_fetcher'
@@ -22,7 +23,7 @@ class TournamentRostersFetcher < BatchFetcher
     ids_to_update = @rosters.reduce(Set.new) { |ids, roster| ids << roster[:tournament_id] }.to_a
     puts "importing data for #{ids_to_update.size} tournaments"
     TournamentRostersImporter.import(data: @rosters, ids: ids_to_update)
-    puts "data imported"
+    puts 'data imported'
   end
 
   def fetch_tournaments_data(ids)
@@ -36,22 +37,18 @@ class TournamentRostersFetcher < BatchFetcher
     hash.flat_map do |tournament_id, tournament_teams|
       tournament_teams.flat_map do |team|
         roster = present_team_roster(team)
-        if roster&.size > 0
-          roster.map { |player| player.update(tournament_id: tournament_id) }
-        else
-          nil
-        end
+        roster.map { |player| player.update(tournament_id:) } if roster&.size&.> 0
       end
     end.compact
   end
 
   def present_team_roster(team)
-    team_id = team.dig("team", "id")
-    team.fetch("teamMembers", []).map do |player|
+    team_id = team.dig('team', 'id')
+    team.fetch('teamMembers', []).map do |player|
       {
-        team_id: team_id,
-        player_id: player.dig("player", "id"),
-        flag: player["flag"],
+        team_id:,
+        player_id: player.dig('player', 'id'),
+        flag: player['flag'],
         is_captain: nil
       }
     end

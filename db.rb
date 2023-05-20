@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sequel'
 
 connection_string = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
@@ -5,11 +7,17 @@ ENV['PGOPTIONS'] = '-c statement_timeout=60s'
 DB = Sequel.connect(connection_string)
 
 def max_team_id
-  DB.fetch("select max(id) from teams").map(:max).first
+  DB.fetch('select max(id) from teams').map(:max).first
 end
 
 def teams_that_played_rating_tournaments
-  DB.fetch("select distinct r.team_id from tournaments t left join tournament_results r on t.id = r.tournament_id where maii_rating = true and r.team_id is not null")
+  query = 'select distinct r.team_id
+           from tournaments t
+           left join tournament_results r
+             on t.id = r.tournament_id
+           where maii_rating = true and r.team_id is not null'
+
+  DB.fetch(query)
     .map(:team_id)
 end
 
@@ -19,7 +27,7 @@ def rating_tournaments
 end
 
 def all_tournaments
-  DB.fetch("select id from tournaments")
+  DB.fetch('select id from tournaments')
     .map(:id)
 end
 

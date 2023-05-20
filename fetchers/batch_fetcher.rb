@@ -1,9 +1,11 @@
-require "httparty"
+# frozen_string_literal: true
+
+require 'httparty'
 
 class BatchFetcher
   BATCH_SIZE = 50
 
-  def initialize(batch_size=BATCH_SIZE, ids:)
+  def initialize(batch_size = BATCH_SIZE, ids:)
     @batch_size = batch_size
     @ids = ids
     @api_client = APIClient.new

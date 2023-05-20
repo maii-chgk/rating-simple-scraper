@@ -1,5 +1,7 @@
-require "httparty"
-require "date"
+# frozen_string_literal: true
+
+require 'httparty'
+require 'date'
 
 require_relative '../../importers/tournament_details_importer'
 require_relative '../../api/client'
@@ -51,7 +53,7 @@ class TournamentDetailsFetcher
     when :recently_updated
       @api_client.tournaments_updated_after(date: recently, page: page_number)
     else
-      raise ArgumentError, "category should be one of :all, :maii:, :recent, :recently_updated"
+      raise ArgumentError, 'category should be one of :all, :maii:, :recent, :recently_updated'
     end
   end
 

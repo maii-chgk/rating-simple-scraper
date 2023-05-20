@@ -1,5 +1,6 @@
-require "set"
-require "httparty"
+# frozen_string_literal: true
+
+require 'httparty'
 
 require_relative '../../importers/tournament_results_importer'
 require_relative '../batch_fetcher'
@@ -21,7 +22,7 @@ class TournamentResultsFetcher < BatchFetcher
     ids_to_update = @results.reduce(Set.new) { |ids, result| ids << result[:tournament_id] }.to_a
     puts "importing data for #{ids_to_update.size} tournaments"
     TournamentResultsImporter.import(data: @results, ids: ids_to_update)
-    puts "data imported"
+    puts 'data imported'
   end
 
   def fetch_tournaments_data(ids)
@@ -34,16 +35,17 @@ class TournamentResultsFetcher < BatchFetcher
   def present_results(hash)
     hash.flat_map do |tournament_id, tournament_results|
       next if tournament_results.is_a?(String)
+
       tournament_results.flat_map do |team|
         {
-          tournament_id: tournament_id,
-          team_id: team.dig("team", "id"),
-          team_title: team.dig("current", "name"),
-          team_city_id: team.dig("current", "town", "id"),
-          total: team["questionsTotal"],
-          position: team["position"],
-          old_rating: team.dig("rating", "b"),
-          old_rating_delta: team.dig("rating", "d")
+          tournament_id:,
+          team_id: team.dig('team', 'id'),
+          team_title: team.dig('current', 'name'),
+          team_city_id: team.dig('current', 'town', 'id'),
+          total: team['questionsTotal'],
+          position: team['position'],
+          old_rating: team.dig('rating', 'b'),
+          old_rating_delta: team.dig('rating', 'd')
         }
       end
     end.compact

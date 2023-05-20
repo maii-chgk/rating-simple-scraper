@@ -1,4 +1,6 @@
-require "httparty"
+# frozen_string_literal: true
+
+require 'httparty'
 
 require_relative '../importers/teams_importer'
 require_relative '../api/client'
@@ -33,9 +35,9 @@ class FullFetcher
     while entries.size > 0
       puts "fetched page #{page_number}"
 
-      ids = entries.map { |entry| entry["id"]}
+      ids = entries.map { |entry| entry['id'] }
       data = entries.map { |entry| process_row(entry) }
-      importer.import(data: data, ids: ids)
+      importer.import(data:, ids:)
       puts "imported #{ids.size} rows"
 
       page_number += 1
@@ -44,6 +46,6 @@ class FullFetcher
   end
 
   def fetch_page(page)
-    @api_client.send(api_method, page: page)
+    @api_client.send(api_method, page:)
   end
 end
