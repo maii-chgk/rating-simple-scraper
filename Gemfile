@@ -1,9 +1,10 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-gem 'sequel'
-gem 'pg'
+source 'https://rubygems.org'
+
+gem 'honeybadger', '~> 4.0'
 gem 'httparty'
-gem "honeybadger", "~> 4.0"
+gem 'pg'
 gem 'rake'
 gem 'rubocop', require: false
 gem 'rubocop-rake', require: false

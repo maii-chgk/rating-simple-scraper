@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../strategies/temp_table'
 
 class TeamsImporter < TempTableStrategy

@@ -1,4 +1,6 @@
-require "httparty"
+# frozen_string_literal: true
+
+require 'httparty'
 
 require_relative '../db'
 require_relative '../api/client'
@@ -36,6 +38,6 @@ class SeasonsImporter
   end
 
   def insert_data
-    DB[:seasons].import([:id, :start, :end], @seasons)
+    DB[:seasons].import(%i[id start end], @seasons)
   end
 end

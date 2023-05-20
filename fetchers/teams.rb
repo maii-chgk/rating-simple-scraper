@@ -1,4 +1,6 @@
-require "httparty"
+# frozen_string_literal: true
+
+require 'httparty'
 
 require_relative '../importers/teams_importer'
 require_relative './full_fetcher'
@@ -14,9 +16,9 @@ class TeamsFetcher < FullFetcher
 
   def process_row(team)
     {
-      id: team["id"],
-      title: team["name"],
-      town_id: team.dig("town", "id")
+      id: team['id'],
+      title: team['name'],
+      town_id: team.dig('town', 'id')
     }
   end
 end

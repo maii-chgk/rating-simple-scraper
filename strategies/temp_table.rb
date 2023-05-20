@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require_relative '../db'
 
 class TempTableStrategy
   def self.import(data:, ids:)
-    self.new(data, ids).import
+    new(data, ids).import
   end
 
   def initialize(data, ids)
@@ -11,7 +13,7 @@ class TempTableStrategy
   end
 
   def import
-    return if @data.size == 0 || @ids.size == 0
+    return if @data.empty? || @ids.empty?
 
     create_main_table
     create_temp_table
@@ -27,7 +29,7 @@ class TempTableStrategy
   end
 
   def set_updated_at
-    DB[temp_table_name.to_sym].update(:updated_at => DateTime.now)
+    DB[temp_table_name.to_sym].update(updated_at: DateTime.now)
   end
 
   def columns_to_import

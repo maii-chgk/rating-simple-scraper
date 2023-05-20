@@ -1,4 +1,6 @@
-require "httparty"
+# frozen_string_literal: true
+
+require 'httparty'
 
 require_relative '../importers/towns_importer'
 require_relative './full_fetcher'
