@@ -9,17 +9,22 @@ require_relative '../api/client'
 class BaseRostersFetcher < BatchFetcher
   def run_for_batch(team_ids)
     puts "importing rosters for up to #{team_ids.size} teams"
-    rosters_raw = fetch_rosters(team_ids)
-    puts "fetched data for #{rosters_raw.size} teams"
+    rosters = fetch_rosters(team_ids)
+    puts "fetched data for #{rosters.size} teams"
 
-    rosters_to_delete = rosters_raw.select { |_team_id, team_rosters| team_rosters.empty? }.keys
-    delete_empty_rosters(rosters_to_delete) unless rosters_to_delete.empty?
+    delete_empty_rosters(rosters)
 
-    rosters = present_rosters(rosters_raw)
-    ids_to_update = rosters.reduce(Set.new) { |ids, roster| ids << roster[:team_id] }.to_a
+    rosters_to_import = present_rosters(rosters)
+    ids_to_update = rosters_to_import.reduce(Set.new) { |ids, roster| ids << roster[:team_id] }.to_a
     puts "importing data for #{ids_to_update.size} teams"
-    BaseRostersImporter.import(data: rosters, ids: ids_to_update)
+    BaseRostersImporter.import(data: rosters_to_import, ids: ids_to_update)
     puts 'data imported'
+  end
+
+  def delete_empty_rosters(rosters)
+    rosters_to_delete = rosters.select { |_team_id, team_rosters| team_rosters.empty? }.keys
+    puts "will delete rosters for these teams: #{rosters_to_delete}"
+    BaseRostersImporter.delete_rosters_for(team_ids: rosters_to_delete)
   end
 
   def fetch_rosters(ids)
@@ -41,10 +46,5 @@ class BaseRostersFetcher < BatchFetcher
         }
       end
     end
-  end
-
-  def delete_empty_rosters(team_ids)
-    puts "will delete rosters for these teams: #{team_ids}"
-    BaseRostersImporter.delete_rosters_for(team_ids:)
   end
 end
