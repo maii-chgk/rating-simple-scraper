@@ -30,7 +30,10 @@ class BaseRostersFetcher < BatchFetcher
   def fetch_rosters(ids)
     ids.each_with_object({}) do |id, hash|
       hash[id] = @api_client.team_rosters(team_id: id)
-      puts "fetched roster for team #{hash.size}" if (hash.size % 10).zero?
+      if (hash.size % 10).zero?
+        puts "fetched roster for team ##{hash.size}"
+        sleep 3
+      end
     end
   end
 
