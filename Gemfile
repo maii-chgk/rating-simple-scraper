@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'honeybadger', '~> 4.0'
+gem 'honeybadger'
 gem 'httparty'
 gem 'pg'
 gem 'rake'

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rapidjson/json_gem'
+require 'honeybadger'
 
 require_relative 'db'
 require_relative './fetchers/towns'
@@ -11,6 +12,10 @@ require_relative './fetchers/tournament/details'
 require_relative './fetchers/tournament/results'
 require_relative './fetchers/tournament/rosters'
 require_relative './standalone/season'
+
+Honeybadger.configure do |config|
+  config.exceptions.rescue_rake = true
+end
 
 namespace :towns do
   task :fetch_all do
@@ -103,4 +108,8 @@ namespace :seasons do
   task :fetch_all do
     SeasonsImporter.new.run
   end
+end
+
+at_exit do
+  Honeybadger.stop
 end

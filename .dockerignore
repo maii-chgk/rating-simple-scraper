@@ -1,6 +1,5 @@
 # flyctl launch added from .gitignore
 **/.idea
-**/honeybadger.yml
 
 # flyctl launch added from .idea/.gitignore
 # Default ignored files
