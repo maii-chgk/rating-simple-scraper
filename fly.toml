@@ -1,15 +1,18 @@
-# fly.toml file generated for rating-importer on 2023-04-08T19:58:57+02:00
+# fly.toml app configuration file generated for rating-importer on 2023-05-28T17:29:06+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "rating-importer"
-kill_signal = "SIGINT"
-kill_timeout = 5
 primary_region = "waw"
-processes = []
-
-[env]
+kill_signal = "SIGINT"
+kill_timeout = "5s"
 
 [experimental]
   auto_rollback = true
+
+[env]
+  PRIMARY_REGION = "waw"
 
 [processes]
   cron = "supercronic /app/crontab"
