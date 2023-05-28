@@ -32,7 +32,7 @@ class BaseRostersFetcher < BatchFetcher
       hash[id] = @api_client.team_rosters(team_id: id)
       if (hash.size % 10).zero?
         puts "fetched roster for team ##{hash.size}"
-        sleep 3
+        sleep 5
       end
     end
   end
