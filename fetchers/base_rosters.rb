@@ -38,7 +38,11 @@ class BaseRostersFetcher < BatchFetcher
   end
 
   def present_rosters(hash)
-    hash.flat_map do |_, players|
+    hash.flat_map do |team_id, players|
+      if players.is_a? String
+        puts "Malformed data for team #{team_id}, skipping it"
+        next
+      end
       players.flat_map do |player|
         {
           team_id: player['idteam'],
@@ -48,6 +52,6 @@ class BaseRostersFetcher < BatchFetcher
           end_date: player['dateRemoved']
         }
       end
-    end
+    end.compact
   end
 end
