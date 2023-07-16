@@ -28,3 +28,6 @@
 
 # Seasons: changes should happen only once a year, but we recheck every week
 15 3 * * THU bundle exec rake seasons:fetch_all
+
+# Backups: we upload a backup of the two main schemas (public and b) to Cloudflare R2 every day
+30 5 * * * bundle exec rake backup

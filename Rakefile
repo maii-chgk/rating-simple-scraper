@@ -2,6 +2,8 @@
 
 require 'rapidjson/json_gem'
 require 'honeybadger'
+require 'aws-sdk-s3'
+require 'date'
 
 require_relative 'db'
 require_relative './fetchers/towns'
@@ -108,6 +110,24 @@ namespace :seasons do
   task :fetch_all do
     SeasonsImporter.new.run
   end
+end
+
+task :backup do
+  access_key_id = ENV.fetch('R2_ACCESS_KEY_ID', nil)
+  secret_access_key = ENV.fetch('R2_SECRET_ACCESS_KEY', nil)
+  cloudflare_account_id = ENV.fetch('R2_ACCOUNT_ID', nil)
+  connection_string = ENV.fetch('CONNECTION_STRING', nil)
+  local_backup_file_name = '/tmp/rating.backup'
+
+  r2 = Aws::S3::Client.new(access_key_id:,
+                           secret_access_key:,
+                           endpoint: "https://#{cloudflare_account_id}.r2.cloudflarestorage.com",
+                           region: 'auto')
+
+  system "pg_dump -n public -n b -Fc -f #{local_backup_file_name} #{connection_string}"
+  r2_object = Aws::S3::Object.new('rating-backups', "#{Date.today}_rating.backup", client: r2)
+  r2_object.upload_file(local_backup_file_name)
+  system "rm #{local_backup_file_name}"
 end
 
 at_exit do

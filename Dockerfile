@@ -25,7 +25,7 @@ RUN bundle install
 FROM base
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y libpq-dev curl
+    apt-get install --no-install-recommends -y libpq-dev curl postgresql-client postgresql-client-common
 
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.2/supercronic-linux-amd64 \
     SUPERCRONIC=supercronic-linux-amd64 \
