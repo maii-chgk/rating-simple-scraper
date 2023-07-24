@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'aws-sdk-s3'
 gem 'honeybadger'
 gem 'httparty'
 gem 'pg'
