@@ -62,8 +62,9 @@ class APIClient
   end
 
   def fetch(query)
-    self.class.get(query.to_s, headers: @headers).parsed_response
-  rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT
+    response = self.class.get(query.to_s, headers: @headers)
+    JSON.parse(response.body)
+  rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT, JSON::ParserError
     puts "connection refused at #{query}, retrying in 3 seconds"
     sleep(3)
     retry
