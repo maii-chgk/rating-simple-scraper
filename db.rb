@@ -37,5 +37,9 @@ def recent_tournaments(days:)
 end
 
 def vacuum_full
-  DB.run("vacuum full")
+  # We need another connection, with a larger statement timeout
+  ENV['PGOPTIONS'] = '-c statement_timeout=3600s'
+  connection_string = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
+  connection = Sequel.connect(connection_string)
+  connection.run('vacuum full')
 end

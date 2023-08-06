@@ -132,7 +132,7 @@ end
 
 task :vacuum do
   puts 'starting VACUUM FULL'
-  DB.vacuum_full
+  vacuum_full
   puts 'finished VACUUM FULL'
 end
 
