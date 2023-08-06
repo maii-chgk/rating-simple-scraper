@@ -130,6 +130,12 @@ task :backup do
   system "rm #{local_backup_file_name}"
 end
 
+task :vacuum do
+  puts 'starting VACUUM FULL'
+  DB.vacuum_full
+  puts 'finished VACUUM FULL'
+end
+
 at_exit do
   Honeybadger.stop
 end
