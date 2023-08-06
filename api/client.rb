@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require_relative '../logger'
+
 class APIClient
+  include Loggable
   include HTTParty
   base_uri 'https://api.rating.chgk.net'
   ITEMS_PER_PAGE = 100
@@ -65,7 +68,7 @@ class APIClient
     response = self.class.get(query.to_s, headers: @headers)
     JSON.parse(response.body)
   rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT, JSON::ParserError
-    puts "connection refused at #{query}, retrying in 3 seconds"
+    logger.warn "connection refused at #{query}, retrying in 3 seconds"
     sleep(3)
     retry
   end

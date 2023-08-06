@@ -5,6 +5,7 @@ require 'honeybadger'
 require 'aws-sdk-s3'
 require 'date'
 
+require_relative 'logger'
 require_relative 'db'
 require_relative './fetchers/towns'
 require_relative './fetchers/teams'
@@ -18,6 +19,8 @@ require_relative './standalone/season'
 Honeybadger.configure do |config|
   config.exceptions.rescue_rake = true
 end
+
+logger = Loggable.logger
 
 namespace :towns do
   task :fetch_all do
@@ -45,7 +48,7 @@ namespace :base_rosters do
                 args[:first_id].to_i + args[:number_of_ids].to_i - 1
               end
     ids = (args[:first_id].to_i..last_id.to_i).to_a
-    puts "fetching rosters for ids from #{args[:first_id]} to #{last_id}"
+    logger.info "fetching rosters for ids from #{args[:first_id]} to #{last_id}"
     BaseRostersFetcher.new(ids:).run
   end
 
@@ -119,21 +122,28 @@ task :backup do
   connection_string = ENV.fetch('CONNECTION_STRING', nil)
   local_backup_file_name = '/tmp/rating.backup'
 
+  logger.info 'connecting to R2'
   r2 = Aws::S3::Client.new(access_key_id:,
                            secret_access_key:,
                            endpoint: "https://#{cloudflare_account_id}.r2.cloudflarestorage.com",
                            region: 'auto')
 
+  logger.info 'starting pg_dump'
   system "pg_dump -n public -n b -Fc -f #{local_backup_file_name} #{connection_string}"
+
+  logger.info 'pg_dump complete, uploading to R2'
   r2_object = Aws::S3::Object.new('rating-backups', "#{Date.today}_rating.backup", client: r2)
   r2_object.upload_file(local_backup_file_name)
+
+  logger.info 'uploaded to R2, removing local copy'
   system "rm #{local_backup_file_name}"
+  logger.info 'backup completed'
 end
 
 task :vacuum do
-  puts 'starting VACUUM FULL'
+  logger.info 'starting VACUUM FULL'
   vacuum_full
-  puts 'finished VACUUM FULL'
+  logger.info 'finished VACUUM FULL'
 end
 
 at_exit do

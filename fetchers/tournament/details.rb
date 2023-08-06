@@ -5,8 +5,10 @@ require 'date'
 
 require_relative '../../importers/tournament_details_importer'
 require_relative '../../api/client'
+require_relative '../../logger'
 
 class TournamentDetailsFetcher
+  include Loggable
   def initialize(category:)
     @api_client = APIClient.new
     @category = category
@@ -31,7 +33,7 @@ class TournamentDetailsFetcher
         @tournaments_data << process_data(tournament)
       end
 
-      puts "fetched page #{page_number}"
+      logger.info "fetched page #{page_number}"
 
       page_number += 1
       tournaments = fetch_page(page_number)

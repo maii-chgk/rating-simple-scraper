@@ -4,9 +4,12 @@ require 'httparty'
 
 require_relative '../importers/teams_importer'
 require_relative '../api/client'
+require_relative '../logger'
 
 class FullFetcher
   # Goes through all available pages for a resource
+
+  include Loggable
 
   BATCH_SIZE = 100
 
@@ -33,12 +36,12 @@ class FullFetcher
     entries = fetch_page(page_number)
 
     while entries.size > 0
-      puts "fetched page #{page_number}"
+      logger.info "fetched page #{page_number}"
 
       ids = entries.map { |entry| entry['id'] }
       data = entries.map { |entry| process_row(entry) }
       importer.import(data:, ids:)
-      puts "imported #{ids.size} rows"
+      logger.info "imported #{ids.size} rows"
 
       page_number += 1
       entries = fetch_page(page_number)

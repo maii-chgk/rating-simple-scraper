@@ -14,16 +14,16 @@ class TournamentRostersFetcher < BatchFetcher
   end
 
   def run_for_batch(tournament_ids)
-    puts "importing rosters for up to #{tournament_ids.size} tournaments"
+    logger.info "importing rosters for up to #{tournament_ids.size} tournaments"
     tournaments_data = fetch_tournaments_data(tournament_ids)
-    puts "fetched data for #{tournaments_data.size} tournaments"
+    logger.info "fetched data for #{tournaments_data.size} tournaments"
 
     @rosters = present_rosters(tournaments_data)
 
     ids_to_update = @rosters.reduce(Set.new) { |ids, roster| ids << roster[:tournament_id] }.to_a
-    puts "importing data for #{ids_to_update.size} tournaments"
+    logger.info "importing data for #{ids_to_update.size} tournaments"
     TournamentRostersImporter.import(data: @rosters, ids: ids_to_update)
-    puts 'data imported'
+    logger.info 'data imported'
   end
 
   def fetch_tournaments_data(ids)
