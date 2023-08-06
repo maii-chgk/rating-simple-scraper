@@ -35,3 +35,7 @@ def recent_tournaments(days:)
   DB.fetch("select id from tournaments where end_datetime < now() and end_datetime > now() - interval '? days'", days)
     .map(:id)
 end
+
+def vacuum_full
+  DB.run("vacuum full")
+end
