@@ -37,6 +37,8 @@ class TournamentResultsFetcher < BatchFetcher
       next if tournament_results.is_a?(String)
 
       tournament_results.flat_map do |team|
+        next unless team.is_a? Hash
+
         {
           tournament_id:,
           team_id: team.dig('team', 'id'),
