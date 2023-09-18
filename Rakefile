@@ -156,9 +156,9 @@ task :backup_to_sqlite do
   b_backup_file_name = '/tmp/rating_b.sqlite'
 
   public_backup_command = <<~PUBLIC
-    db-to-sqlite "#{connection_string}" #{public_backup_file_name} --all \
+    /venv/bin/db-to-sqlite "#{connection_string}" #{public_backup_file_name} --all \
       --postgres-schema public \
-      -p \
+      --progress \
       --skip django_migrations --skip django_admin_log --skip django_content_type --skip django_session \
       --skip ar_internal_metadata --skip auth_group --skip auth_group_permissions --skip auth_permission \
       --skip auth_user --skip auth_user_groups --skip auth_user_user_permissions --skip ndcg --skip schema_migrations \
@@ -166,8 +166,10 @@ task :backup_to_sqlite do
   PUBLIC
 
   b_backup_command = <<~B
-      db-to-sqlite "#{connection_string}" #{b_backup_file_name} --all --postgres-schema b -p \
-    --skip django_migrations --skip team_rating_by_player --skip team_lost_heredity
+    /venv/bin/db-to-sqlite "#{connection_string}" #{b_backup_file_name} --all \
+      --postgres-schema b \
+      --progress \
+      --skip django_migrations --skip team_rating_by_player --skip team_lost_heredity
   B
 
   logger.info 'starting db-to-sqlite for schema public'
