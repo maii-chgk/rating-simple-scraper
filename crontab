@@ -32,5 +32,8 @@
 # Backups: we upload a backup of the two main schemas (public and b) to Cloudflare R2 every day
 30 5 * * * bundle exec rake backup
 
+# Backups: we upload a backup of the two main schemas (public and b) in sqlite to Cloudflare R2 every day
+30 6 * * * bundle exec rake backup
+
 # Vacuuming the database: during import runs, we delete a lot of rows, so the database needs regular vacuuming
 30 23 * * * bundle exec rake vacuum
