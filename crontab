@@ -33,4 +33,4 @@
 30 5 * * * bundle exec rake backup
 
 # Vacuuming the database: during import runs, we delete a lot of rows, so the database needs regular vacuuming
-30 4 * * MON bundle exec rake vacuum
+30 23 * * * bundle exec rake vacuum
