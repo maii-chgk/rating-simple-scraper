@@ -37,6 +37,11 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
  && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
  && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
+# Install python and db-to-sqlite for sqlite backups
+RUN apt-get install --no-install-recommends -y python3-dev python3-pip python3-venv build-essential
+RUN python3 -m venv /venv && \
+    /venv/bin/pip install 'db-to-sqlite[postgresql]'
+
 # Run and own the application files as a non-root user for security
 RUN useradd ruby --home /app --shell /bin/bash
 USER ruby:ruby

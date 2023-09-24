@@ -7,14 +7,15 @@ require 'date'
 
 require_relative 'logger'
 require_relative 'db'
-require_relative './fetchers/towns'
-require_relative './fetchers/teams'
-require_relative './fetchers/players'
-require_relative './fetchers/base_rosters'
-require_relative './fetchers/tournament/details'
-require_relative './fetchers/tournament/results'
-require_relative './fetchers/tournament/rosters'
-require_relative './standalone/season'
+require_relative 'fetchers/towns'
+require_relative 'fetchers/teams'
+require_relative 'fetchers/players'
+require_relative 'fetchers/base_rosters'
+require_relative 'fetchers/tournament/details'
+require_relative 'fetchers/tournament/results'
+require_relative 'fetchers/tournament/rosters'
+require_relative 'standalone/season'
+require_relative 'backup/sqlite'
 
 Honeybadger.configure do |config|
   config.exceptions.rescue_rake = true
@@ -113,31 +114,6 @@ namespace :seasons do
   task :fetch_all do
     SeasonsImporter.new.run
   end
-end
-
-task :backup do
-  access_key_id = ENV.fetch('R2_ACCESS_KEY_ID', nil)
-  secret_access_key = ENV.fetch('R2_SECRET_ACCESS_KEY', nil)
-  cloudflare_account_id = ENV.fetch('R2_ACCOUNT_ID', nil)
-  connection_string = ENV.fetch('CONNECTION_STRING', nil)
-  local_backup_file_name = '/tmp/rating.backup'
-
-  logger.info 'connecting to R2'
-  r2 = Aws::S3::Client.new(access_key_id:,
-                           secret_access_key:,
-                           endpoint: "https://#{cloudflare_account_id}.r2.cloudflarestorage.com",
-                           region: 'auto')
-
-  logger.info 'starting pg_dump'
-  system "pg_dump -n public -n b -Fc -f #{local_backup_file_name} #{connection_string}"
-
-  logger.info 'pg_dump complete, uploading to R2'
-  r2_object = Aws::S3::Object.new('rating-backups', "#{Date.today}_rating.backup", client: r2)
-  r2_object.upload_file(local_backup_file_name)
-
-  logger.info 'uploaded to R2, removing local copy'
-  system "rm #{local_backup_file_name}"
-  logger.info 'backup completed'
 end
 
 task :vacuum do
