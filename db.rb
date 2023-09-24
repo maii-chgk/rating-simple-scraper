@@ -2,9 +2,9 @@
 
 require 'sequel'
 
-connection_string = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
+POSTGRES_CONNECTION_STRING = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
 ENV['PGOPTIONS'] = '-c statement_timeout=60s'
-DB = Sequel.connect(connection_string)
+DB = Sequel.connect(POSTGRES_CONNECTION_STRING)
 
 def max_team_id
   DB.fetch('select max(id) from teams').map(:max).first
@@ -39,7 +39,7 @@ end
 def vacuum_full
   # We need another connection, with a larger statement timeout
   ENV['PGOPTIONS'] = '-c statement_timeout=3600s'
-  connection_string = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
+  connection_string = POSTGRES_CONNECTION_STRING
   connection = Sequel.connect(connection_string)
   connection.run('vacuum full')
 end
