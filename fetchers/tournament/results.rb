@@ -47,7 +47,9 @@ class TournamentResultsFetcher < BatchFetcher
           total: team['questionsTotal'],
           position: team['position'],
           old_rating: team.dig('rating', 'b'),
-          old_rating_delta: team.dig('rating', 'd')
+          old_rating_delta: team.dig('rating', 'd'),
+          points: team['questionsTotal'],
+          points_mask: team['mask']
         }
       end
     end.compact
