@@ -29,7 +29,7 @@ class APIClient
   end
 
   def tournament_results(tournament_id:)
-    params = 'results?includeTeamMembers=0&includeMasksAndControversials=0&includeTeamFlags=0&includeRatingB=0'
+    params = 'results?includeTeamMembers=0&includeMasksAndControversials=1&includeTeamFlags=0&includeRatingB=0'
     fetch("/tournaments/#{tournament_id}/#{params}")
   end
 

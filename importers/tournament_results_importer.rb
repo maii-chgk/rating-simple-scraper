@@ -15,6 +15,8 @@ class TournamentResultsImporter < TempTableStrategy
       Integer :old_rating
       Integer :old_rating_delta
       DateTime :updated_at
+      Integer :points
+      String :points_mask
     end
   end
 
