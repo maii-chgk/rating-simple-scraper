@@ -44,11 +44,14 @@ RUN python3 -m venv /venv && \
 
 # Run and own the application files as a non-root user for security
 RUN useradd ruby --home /app --shell /bin/bash
-USER ruby:ruby
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=ruby:ruby /app /app
+
+RUN chmod -R 777 /app
+
+USER ruby:ruby
 
 # Copy application code
 COPY . .
