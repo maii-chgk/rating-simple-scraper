@@ -16,6 +16,7 @@ require_relative 'fetchers/tournament/results'
 require_relative 'fetchers/tournament/rosters'
 require_relative 'standalone/season'
 require_relative 'backup/sqlite'
+require_relative 'backup/postgres'
 
 Honeybadger.configure do |config|
   config.exceptions.rescue_rake = true
