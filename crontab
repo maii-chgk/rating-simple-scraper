@@ -14,8 +14,10 @@
 35 12 * * * bundle exec rake base_rosters:fetch_for_teams_in_rating_tournaments
 
 # Refreshing all base rosters
-0 3 * * SUN bundle exec rake base_rosters:fetch_id_range[1,100000]
-0 3 * * MON bundle exec rake base_rosters:fetch_id_range[100001,100000]
+0 3 * * TUE bundle exec rake base_rosters:fetch_id_range[1,30000]
+0 3 * * WED bundle exec rake base_rosters:fetch_id_range[30001,30000]
+0 3 * * THU bundle exec rake base_rosters:fetch_id_range[60001,30000]
+0 3 * * FRI bundle exec rake base_rosters:fetch_id_range[90001,30000]
 
 # Additional data: names of players and teams, new towns in the database
 30 10 * * * bundle exec rake players:fetch_all
