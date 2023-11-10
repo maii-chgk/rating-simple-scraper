@@ -1,42 +1,43 @@
+# All imports are started at even hours
 # Every two hours we load data for the most recent tournaments
 35 */2 * * * bundle exec rake tournaments:results_for_recent[28]
 40 */2 * * * bundle exec rake tournaments:rosters_for_recent[28]
 
 # Once a day we refresh data for all rating tournaments (starting with September 2021)
-30 9 * * * bundle exec rake tournaments:results_for_rating
-40 9 * * * bundle exec rake tournaments:rosters_for_rating
+5 8 * * * bundle exec rake tournaments:results_for_rating
+10 8 * * * bundle exec rake tournaments:rosters_for_rating
 
 # Once a week we update data for all tournaments in the past year
-15 1 * * TUE bundle exec rake tournaments:rosters_for_recent[365]
-15 3 * * TUE bundle exec rake tournaments:results_for_recent[365]
+15 2 * * TUE bundle exec rake tournaments:rosters_for_recent[365]
+15 4 * * TUE bundle exec rake tournaments:results_for_recent[365]
 
 # Updating base rosters for teams that have played rating tournaments
-35 12 * * * bundle exec rake base_rosters:fetch_for_teams_in_rating_tournaments
+10 12 * * * bundle exec rake base_rosters:fetch_for_teams_in_rating_tournaments
 
 # Refreshing all base rosters
-0 3 * * TUE bundle exec rake base_rosters:fetch_id_range[1,30000]
-0 3 * * WED bundle exec rake base_rosters:fetch_id_range[30001,30000]
-0 3 * * THU bundle exec rake base_rosters:fetch_id_range[60001,30000]
-0 3 * * FRI bundle exec rake base_rosters:fetch_id_range[90001,30000]
+0 2 * * TUE bundle exec rake base_rosters:fetch_id_range[1,30000]
+0 2 * * WED bundle exec rake base_rosters:fetch_id_range[30001,30000]
+0 2 * * THU bundle exec rake base_rosters:fetch_id_range[60001,30000]
+0 2 * * FRI bundle exec rake base_rosters:fetch_id_range[90001,30000]
 
 # Additional data: names of players and teams, new towns in the database
 30 10 * * * bundle exec rake players:fetch_all
-30 15 * * * bundle exec rake teams:fetch_all
+30 16 * * * bundle exec rake teams:fetch_all
 0 12 * * * bundle exec rake towns:fetch_all
 
 # Information about tournaments: name, city, number of questions
 50 */6 * * * bundle exec rake tournaments:details_for_rating_tournaments
-15 3 * * WED bundle exec rake tournaments:details_for_all_tournaments
+15 4 * * WED bundle exec rake tournaments:details_for_all_tournaments
 
 # Seasons: changes should happen only once a year, but we recheck every week
-15 3 * * THU bundle exec rake seasons:fetch_all
+15 6 * * THU bundle exec rake seasons:fetch_all
 
 # Backups: we upload a backup of the two main schemas (public and b) to Cloudflare R2 every day
-30 5 * * * bundle exec rake backup
+25 23 * * * bundle exec rake backup
 
 # Backups: we upload a backup of the two main schemas (public and b) in sqlite to Cloudflare R2 every day
-15 23 * * * bundle exec rake backup_public_to_sqlite
-25 23 * * * bundle exec rake backup_b_to_sqlite
+35 23 * * * bundle exec rake backup_public_to_sqlite
+45 23 * * * bundle exec rake backup_b_to_sqlite
 
 # Vacuuming the database: during import runs, we delete a lot of rows, so the database needs regular vacuuming
-10 23 * * * bundle exec rake vacuum
+20 23 * * * bundle exec rake vacuum
