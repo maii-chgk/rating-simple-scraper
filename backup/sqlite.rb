@@ -90,7 +90,7 @@ task :backup_public_to_sqlite do
 end
 
 task :backup_b_to_sqlite do
-  skip_tables = %w[django_migrations team_rating_by_player team_lost_heredity player_rating_by_tournament]
+  skip_tables = %w[django_migrations team_rating_by_player team_lost_heredity player_rating_by_tournament player_rating]
 
   # As of Sept 2023, db-to-sqlite loads the whole table into memory before exporting it into sqlite.
   # To export player_rating_by_tournament, we would need at least 4GB of RAM.
@@ -109,5 +109,19 @@ task :backup_b_to_sqlite do
     );
   SQL
 
-  Backup.new('b', skip_tables, [['player_rating_by_tournament', player_rating_by_tournament_definition]]).run
+  player_rating_definition = <<~SQL
+    drop table if exists player_rating;
+    create table player_rating(
+      id            bigserial,
+      player_id     integer,
+      rating        integer,
+      rating_change integer,
+      release_id    integer,
+      place         numeric(7, 1),
+      place_change  numeric(7, 1)
+    );
+  SQL
+
+  Backup.new('b', skip_tables, [['player_rating_by_tournament', player_rating_by_tournament_definition],
+                                ['player_rating', player_rating_definition]]).run
 end
