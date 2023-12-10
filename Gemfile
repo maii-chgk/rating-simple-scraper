@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'aws-sdk-s3'
+gem 'google_drive'
 gem 'honeybadger'
 gem 'httparty'
 gem 'newrelic_rpm'
@@ -13,5 +14,4 @@ gem 'rubocop', require: false
 gem 'rubocop-rake', require: false
 gem 'rubocop-sequel', require: false
 gem 'sequel'
-
-gem "sqlite3", "~> 1.6"
+gem 'sqlite3', '~> 1.6'

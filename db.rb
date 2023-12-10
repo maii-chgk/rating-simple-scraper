@@ -36,10 +36,38 @@ def recent_tournaments(days:)
     .map(:id)
 end
 
+def tournaments_after(date)
+  DB.fetch('select start_datetime as date, id, title from tournaments where maii_rating = true and start_datetime > ?',
+           date)
+end
+
 def vacuum_full
   # We need another connection, with a larger statement timeout
   ENV['PGOPTIONS'] = '-c statement_timeout=3600s'
   connection_string = POSTGRES_CONNECTION_STRING
   connection = Sequel.connect(connection_string)
   connection.run('vacuum full')
+end
+
+def fetch_base_teams(players:, date:)
+  query = <<~SQL
+    select team_id from base_rosters
+    where season_id = (select id from seasons where start < ? and "end" > ?)
+       and start_date < ? and (end_date is null or end_date > ?)
+       and player_id in ?
+  SQL
+  DB.fetch(query, date, date, date, date, players)
+    .map(:team_id)
+end
+
+def fetch_tournament_team_name(tournament_id:, team_id:)
+  DB[:tournament_results].where(tournament_id:, team_id:).first[:team_title]
+end
+
+def fetch_base_team_name(team_id:)
+  DB[:teams].where(id: team_id).first[:title]
+end
+
+def fetch_tournament_rosters(tournament_id)
+  DB[:tournament_rosters].where(tournament_id:)
 end

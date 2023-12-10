@@ -17,6 +17,7 @@ require_relative 'fetchers/tournament/rosters'
 require_relative 'standalone/season'
 require_relative 'backup/sqlite'
 require_relative 'backup/postgres'
+require_relative 'exporters/continuity'
 
 Honeybadger.configure do |config|
   config.exceptions.rescue_rake = true
@@ -121,6 +122,12 @@ task :vacuum do
   logger.info 'starting VACUUM FULL'
   vacuum_full
   logger.info 'finished VACUUM FULL'
+end
+
+namespace :export do
+  task :continuity do
+    export_wrong_team_ids
+  end
 end
 
 at_exit do
