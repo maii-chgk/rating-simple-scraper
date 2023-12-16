@@ -2,3 +2,4 @@
 honeybadger.yml
 *.log
 *.sqlite
+*.json
