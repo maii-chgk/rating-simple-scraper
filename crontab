@@ -41,3 +41,6 @@
 
 # Vacuuming the database: during import runs, we delete a lot of rows, so the database needs regular vacuuming
 20 23 * * * bundle exec rake vacuum
+
+# Wrong team IDs: team IDs are assigned by representatives manually and sometimes need correction
+0 20 * * * bundle exec rake export:continuity
