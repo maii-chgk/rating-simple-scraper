@@ -126,7 +126,7 @@ end
 
 namespace :export do
   task :continuity do
-    export_wrong_team_ids
+    WrongTeamIDsExporter.new(Time.new(2021, 9, 9)).run
   end
 end
 

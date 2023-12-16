@@ -3,7 +3,6 @@
 source 'https://rubygems.org'
 
 gem 'aws-sdk-s3'
-gem 'google_drive'
 gem 'honeybadger'
 gem 'httparty'
 gem 'newrelic_rpm'

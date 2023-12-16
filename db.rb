@@ -62,14 +62,6 @@ def fetch_base_teams(players:, date:)
     .map(:team_id)
 end
 
-def fetch_tournament_team_name(tournament_id:, team_id:)
-  DB[:tournament_results].where(tournament_id:, team_id:).first[:team_title]
-end
-
-def fetch_base_team_name(team_id:)
-  DB[:teams].where(id: team_id).first[:title]
-end
-
 def fetch_tournament_rosters(tournament_id)
   DB[:tournament_rosters].where(tournament_id:)
 end
