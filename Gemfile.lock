@@ -23,32 +23,38 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     jmespath (1.6.2)
-    json (2.6.3)
+    json (2.7.1)
+    language_server-protocol (3.17.0.3)
     mini_mime (1.1.2)
     minitest (5.20.0)
     multi_xml (0.6.0)
     newrelic_rpm (9.2.2)
-    parallel (1.23.0)
-    parser (3.2.2.1)
+    parallel (1.24.0)
+    parser (3.2.2.4)
       ast (~> 2.4.1)
+      racc
     pg (1.5.3)
+    racc (1.7.3)
     rainbow (3.1.1)
     rake (13.0.6)
     rapidjson (0.1.1)
-    regexp_parser (2.8.0)
-    rexml (3.2.5)
-    rubocop (1.51.0)
+    regexp_parser (2.8.3)
+    rexml (3.2.6)
+    rubocop (1.59.0)
       json (~> 2.3)
+      language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
-      parser (>= 3.2.0.0)
+      parser (>= 3.2.2.4)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.28.0, < 2.0)
+      rubocop-ast (>= 1.30.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.28.1)
+    rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
+    rubocop-minitest (0.31.1)
+      rubocop (>= 1.39, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
     rubocop-sequel (0.3.4)
@@ -58,7 +64,7 @@ GEM
     sqlite3 (1.6.6-arm64-darwin)
     sqlite3 (1.6.6-x86_64-darwin)
     sqlite3 (1.6.6-x86_64-linux)
-    unicode-display_width (2.4.2)
+    unicode-display_width (2.5.0)
 
 PLATFORMS
   arm64-darwin
@@ -75,6 +81,7 @@ DEPENDENCIES
   rake
   rapidjson
   rubocop
+  rubocop-minitest
   rubocop-rake
   rubocop-sequel
   sequel

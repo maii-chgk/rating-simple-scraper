@@ -1,6 +1,7 @@
 require:
   - rubocop-sequel
   - rubocop-rake
+  - rubocop-minitest
 
 AllCops:
   NewCops: enable
@@ -21,4 +22,13 @@ Rake/Desc:
   Enabled: false
 
 Naming/PredicateName:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
   Enabled: false

@@ -43,7 +43,7 @@ class Backup
   end
 
   def export_additional_tables
-    logger.info "exporting additional tables"
+    logger.info 'exporting additional tables'
     @tables_to_export_separately.each do |table, definition|
       create_table(definition)
       export_table(table)
@@ -83,7 +83,8 @@ end
 task :backup_public_to_sqlite do
   skip_tables = %w[django_migrations django_admin_log django_content_type
                    django_session ar_internal_metadata
-                   auth_group_permissions auth_group auth_permission auth_user auth_user_groups auth_user_user_permissions
+                   auth_group_permissions auth_group auth_permission
+                   auth_user auth_user_groups auth_user_user_permissions
                    schema_migrations ndcg models]
 
   Backup.new('public', skip_tables).run
