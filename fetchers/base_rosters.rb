@@ -5,7 +5,7 @@ require 'httparty'
 require_relative '../importers/base_roster_importer'
 require_relative './batch_fetcher'
 require_relative '../api/client'
-require_relative '../logger'
+require_relative '../logging'
 
 class BaseRostersFetcher < BatchFetcher
   include Loggable

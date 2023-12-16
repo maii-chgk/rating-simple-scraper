@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'httparty'
-require_relative '../logger'
+require_relative '../logging'
 
 class BatchFetcher
   BATCH_SIZE = 50

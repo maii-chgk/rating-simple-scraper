@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../db'
-require_relative '../logger'
+require_relative '../logging'
 
 TeamIDUpdate = Struct.new('TeamIDUpdate', :tournament_id, :tournament_title, :tournament_date,
                           :old_id, :new_id)

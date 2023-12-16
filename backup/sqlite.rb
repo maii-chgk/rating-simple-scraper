@@ -2,7 +2,7 @@
 
 require 'sqlite3'
 
-require_relative '../logger'
+require_relative '../logging'
 require_relative '../db'
 require_relative 'r2'
 
