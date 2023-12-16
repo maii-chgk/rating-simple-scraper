@@ -37,8 +37,10 @@ def recent_tournaments(days:)
 end
 
 def tournaments_after(date)
-  DB.fetch('select start_datetime as date, id, title from tournaments where maii_rating = true and start_datetime > ?',
-           date)
+  DB[:tournaments]
+    .where(maii_rating: true)
+    .where { start_datetime > date }
+    .where { end_datetime < Time.now }
 end
 
 def vacuum_full

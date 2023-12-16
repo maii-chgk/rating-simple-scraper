@@ -61,8 +61,15 @@ class TournamentChecker
 
   def initialize(tournament)
     @id = tournament[:id]
-    @date = tournament[:date]
+    @end_date = tournament[:end_datetime]
+    @release_date = next_thursday(@end_date)
     @title = tournament[:title]
+  end
+
+  def next_thursday(date)
+    date = date.to_date
+    date = date.next_day until date.thursday?
+    date
   end
 
   def wrong_ids
@@ -78,7 +85,7 @@ class TournamentChecker
   end
 
   def deduce_team_id(team_id, players)
-    base_teams = fetch_base_teams(players:, date: @date)
+    base_teams = fetch_base_teams(players:, date: @release_date)
     return if base_teams.empty?
 
     counts = base_teams.tally.sort_by { |_team, count| -count }
@@ -101,14 +108,14 @@ class TournamentChecker
     new_team_name = fetch_base_team_name(team_id: new_id)
     tournament_title = "=HYPERLINK(CONCAT(\"https://rating.chgk.info/tournament/\", A__ROW_NUMBER__), \"#{@title}\")"
     TeamIDUpdate.new(tournament_id: @id,
-                     tournament_date: @date.strftime('%Y-%m-%d'),
+                     tournament_date: @end_date.strftime('%Y-%m-%d'),
                      tournament_title:,
                      old_id:, old_team_name:,
                      new_id:, new_team_name:)
   end
 
   def has_continuity?(base_players, legionnaires)
-    if @date >= FIRST_DATE_OF_2022_RULES
+    if @end_date >= FIRST_DATE_OF_2022_RULES
       (base_players >= 3) && (legionnaires < base_players) && (legionnaires <= 3)
     else
       base_players >= 4
@@ -116,3 +123,6 @@ class TournamentChecker
   end
 end
 
+started = Time.now
+export_wrong_team_ids
+puts "started at #{started}, finished at #{Time.now}"
