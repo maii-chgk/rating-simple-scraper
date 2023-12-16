@@ -25,6 +25,7 @@ GEM
     jmespath (1.6.2)
     json (2.6.3)
     mini_mime (1.1.2)
+    minitest (5.20.0)
     multi_xml (0.6.0)
     newrelic_rpm (9.2.2)
     parallel (1.23.0)
@@ -68,6 +69,7 @@ DEPENDENCIES
   aws-sdk-s3
   honeybadger
   httparty
+  minitest
   newrelic_rpm
   pg
   rake

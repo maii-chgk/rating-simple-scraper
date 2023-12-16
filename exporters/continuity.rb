@@ -55,6 +55,8 @@ class TournamentChecker
   FIRST_DATE_OF_2021_RULES = Time.new(2021, 8, 28)
   FIRST_DATE_OF_2022_RULES = Time.new(2022, 11, 18)
 
+  attr_reader :release_date
+
   def initialize(tournament)
     @id = tournament[:id]
     @end_date = tournament[:end_datetime]

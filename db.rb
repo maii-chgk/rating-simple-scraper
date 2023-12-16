@@ -4,7 +4,7 @@ require 'sequel'
 
 POSTGRES_CONNECTION_STRING = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
 ENV['PGOPTIONS'] = '-c statement_timeout=60s'
-DB = Sequel.connect(POSTGRES_CONNECTION_STRING)
+DB = Sequel.connect(POSTGRES_CONNECTION_STRING) unless ENV['RUBY_ENV'] == 'test'
 
 def max_team_id
   DB.fetch('select max(id) from teams').map(:max).first

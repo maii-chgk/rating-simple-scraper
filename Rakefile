@@ -4,8 +4,11 @@ require 'rapidjson/json_gem'
 require 'honeybadger'
 require 'aws-sdk-s3'
 require 'date'
+require 'minitest/test_task'
 
-require_relative 'logger'
+Minitest::TestTask.create
+
+require_relative 'logging'
 require_relative 'db'
 require_relative 'fetchers/towns'
 require_relative 'fetchers/teams'
