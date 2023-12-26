@@ -62,6 +62,7 @@ class TournamentChecker
     @end_date = tournament[:end_datetime]
     @release_date = next_thursday(@end_date)
     @title = tournament[:title]
+    @logger = Loggable.logger
   end
 
   def next_thursday(date)
@@ -73,13 +74,17 @@ class TournamentChecker
   def wrong_ids
     players = fetch_tournament_rosters(@id)
 
-    rosters = players.each_with_object(Hash.new { |h, k| h[k] = [] }) do |row, hash|
+    @rosters = players.each_with_object(Hash.new { |h, k| h[k] = [] }) do |row, hash|
       hash[row[:team_id]] << row[:player_id]
     end
 
-    rosters.map do |team_id, team_players|
+    @id_changes = @rosters.map do |team_id, team_players|
       deduce_team_id(team_id, team_players)
     end.compact
+
+    mark_same_id_assignments!
+    mark_potential_duplicates!
+    @id_changes
   end
 
   def deduce_team_id(team_id, players)
@@ -103,6 +108,44 @@ class TournamentChecker
                      tournament_title: @title,
                      old_id: team_id,
                      new_id: probable_base_team)
+  end
+
+  def mark_same_id_assignments!
+    # If two ids should be changed to the same one, we don’t change them:
+    # it means that a team consciously split into two (see А.3.3.2)
+    ids_tally = @id_changes.map(&:new_id).tally
+    duplicate_ids = ids_tally.filter_map { |id, count| id if count >= 2 }
+    @id_changes.each do |id_change|
+      id_change.new_id = -1 if duplicate_ids.include?(id_change.new_id)
+    end
+  end
+
+  def mark_potential_duplicates!
+    # If a team is assigned to an id that already existed in the tournament,
+    # we check if the already existing has continuity.
+    # If it does, we should assign a second team to the same ID.
+    # It it does not, we should get a new ID for the old team, and preserve reassignment.
+    @id_changes.each do |id_change|
+      team_id = id_change.new_id
+      next unless @rosters.keys.include?(team_id)
+
+      if is_continuous_to?(@rosters[team_id], team_id)
+        id_change.new_id = -1
+      else
+        @id_changes << TeamIDUpdate.new(tournament_id: @id,
+                                        tournament_date: @end_date.strftime('%Y-%m-%d'),
+                                        tournament_title: @title,
+                                        old_id: team_id,
+                                        new_id: 0)
+      end
+    end
+  end
+
+  def is_continuous_to?(players, team_id)
+    base_teams = fetch_base_teams(players:, date: @release_date)
+    base_team_player_count = base_teams.count(team_id)
+
+    has_continuity?(base_team_player_count, players.size - base_team_player_count)
   end
 
   def has_continuity?(base_players, legionnaires)
