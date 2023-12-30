@@ -3,7 +3,7 @@
 require 'httparty'
 
 require_relative '../importers/players_importer'
-require_relative './full_fetcher'
+require_relative 'full_fetcher'
 
 class PlayersFetcher < FullFetcher
   def importer

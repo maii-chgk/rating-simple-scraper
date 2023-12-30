@@ -5,7 +5,7 @@ require 'date'
 
 require_relative '../../importers/tournament_details_importer'
 require_relative '../../api/client'
-require_relative '../../logger'
+require_relative '../../logging'
 
 class TournamentDetailsFetcher
   include Loggable

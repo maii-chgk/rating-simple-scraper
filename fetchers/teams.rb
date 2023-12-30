@@ -3,7 +3,7 @@
 require 'httparty'
 
 require_relative '../importers/teams_importer'
-require_relative './full_fetcher'
+require_relative 'full_fetcher'
 
 class TeamsFetcher < FullFetcher
   def importer

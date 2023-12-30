@@ -3,9 +3,9 @@
 require 'httparty'
 
 require_relative '../importers/base_roster_importer'
-require_relative './batch_fetcher'
+require_relative 'batch_fetcher'
 require_relative '../api/client'
-require_relative '../logger'
+require_relative '../logging'
 
 class BaseRostersFetcher < BatchFetcher
   include Loggable
@@ -41,7 +41,7 @@ class BaseRostersFetcher < BatchFetcher
   end
 
   def present_rosters(hash)
-    hash.flat_map do |team_id, players|
+    hash.flat_map do |_team_id, players|
       players.flat_map do |player|
         {
           team_id: player['idteam'],

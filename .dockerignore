@@ -12,3 +12,5 @@
 .idea/dataSources.local.xml
 fly.toml
 *.sqlite
+*.json
+*.log

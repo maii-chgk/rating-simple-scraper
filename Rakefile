@@ -4,8 +4,11 @@ require 'rapidjson/json_gem'
 require 'honeybadger'
 require 'aws-sdk-s3'
 require 'date'
+require 'minitest/test_task'
 
-require_relative 'logger'
+Minitest::TestTask.create
+
+require_relative 'logging'
 require_relative 'db'
 require_relative 'fetchers/towns'
 require_relative 'fetchers/teams'
@@ -17,6 +20,7 @@ require_relative 'fetchers/tournament/rosters'
 require_relative 'standalone/season'
 require_relative 'backup/sqlite'
 require_relative 'backup/postgres'
+require_relative 'exporters/continuity'
 
 Honeybadger.configure do |config|
   config.exceptions.rescue_rake = true
@@ -59,7 +63,7 @@ namespace :base_rosters do
   end
 end
 
-namespace :tournaments do # rubocop:disable Metrics/BlockLength
+namespace :tournaments do
   task :details_for_all_tournaments do
     TournamentDetailsFetcher.new(category: :all).run
   end
@@ -121,6 +125,12 @@ task :vacuum do
   logger.info 'starting VACUUM FULL'
   vacuum_full
   logger.info 'finished VACUUM FULL'
+end
+
+namespace :export do
+  task :continuity do
+    WrongTeamIDsExporter.new(Time.new(2021, 9, 9)).run
+  end
 end
 
 at_exit do

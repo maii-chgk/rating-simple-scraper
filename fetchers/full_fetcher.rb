@@ -4,7 +4,7 @@ require 'httparty'
 
 require_relative '../importers/teams_importer'
 require_relative '../api/client'
-require_relative '../logger'
+require_relative '../logging'
 
 class FullFetcher
   # Goes through all available pages for a resource

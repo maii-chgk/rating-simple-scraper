@@ -4,7 +4,7 @@ require 'sequel'
 
 POSTGRES_CONNECTION_STRING = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
 ENV['PGOPTIONS'] = '-c statement_timeout=60s'
-DB = Sequel.connect(POSTGRES_CONNECTION_STRING)
+DB = Sequel.connect(POSTGRES_CONNECTION_STRING) unless ENV['RUBY_ENV'] == 'test'
 
 def max_team_id
   DB.fetch('select max(id) from teams').map(:max).first
@@ -36,10 +36,32 @@ def recent_tournaments(days:)
     .map(:id)
 end
 
+def tournaments_after(date)
+  DB[:tournaments]
+    .where(maii_rating: true)
+    .where { start_datetime > date }
+    .where { end_datetime < Time.now }
+end
+
 def vacuum_full
   # We need another connection, with a larger statement timeout
   ENV['PGOPTIONS'] = '-c statement_timeout=3600s'
   connection_string = POSTGRES_CONNECTION_STRING
   connection = Sequel.connect(connection_string)
   connection.run('vacuum full')
+end
+
+def fetch_base_teams(players:, date:)
+  query = <<~SQL
+    select team_id from base_rosters
+    where season_id = (select id from seasons where start < ? and "end" > ?)
+       and start_date < ? and (end_date is null or end_date > ?)
+       and player_id in ?
+  SQL
+  DB.fetch(query, date, date, date, date, players)
+    .map(:team_id)
+end
+
+def fetch_tournament_rosters(tournament_id)
+  DB[:tournament_rosters].where(tournament_id:)
 end
