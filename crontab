@@ -3,6 +3,9 @@
 35 */2 * * * bundle exec rake tournaments:results_for_recent[28]
 40 */2 * * * bundle exec rake tournaments:rosters_for_recent[28]
 
+# Many tournaments open their results at 20:55 UTC
+57 20 * * * bundle exec rake tournaments:results_for_recent[3]
+
 # Once a day we refresh data for all rating tournaments (starting with September 2021)
 5 8 * * * bundle exec rake tournaments:results_for_rating
 10 8 * * * bundle exec rake tournaments:rosters_for_rating
