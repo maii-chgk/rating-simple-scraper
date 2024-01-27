@@ -2,7 +2,7 @@
 
 require 'sequel'
 
-POSTGRES_CONNECTION_STRING = ENV.fetch('CONNECTION_STRING', 'postgres://localhost/postgres')
+POSTGRES_CONNECTION_STRING = ENV.fetch('CONNECTION_STRING', 'postgres://postgres:password@localhost:5432/postgres')
 ENV['PGOPTIONS'] = '-c statement_timeout=60s'
 DB = Sequel.connect(POSTGRES_CONNECTION_STRING) unless ENV['RUBY_ENV'] == 'test'
 
