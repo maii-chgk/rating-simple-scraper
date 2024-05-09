@@ -129,7 +129,8 @@ end
 
 namespace :export do
   task :continuity do
-    WrongTeamIDsExporter.new(Time.new(2021, 9, 9)).run
+    year_ago = Time.now - (60 * 60 * 24 * 365)
+    WrongTeamIDsExporter.new(with_start_date_after: year_ago).run
   end
 end
 

@@ -7,8 +7,8 @@ TeamIDUpdate = Struct.new('TeamIDUpdate', :tournament_id, :tournament_title, :to
                           :old_id, :new_id)
 
 class WrongTeamIDsExporter
-  def initialize(start_date)
-    @start_date = start_date
+  def initialize(with_start_date_after:)
+    @start_date = with_start_date_after
     @logger = Loggable.logger
   end
 
