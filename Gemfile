@@ -6,6 +6,7 @@ gem 'aws-sdk-s3'
 gem 'honeybadger'
 gem 'httparty'
 gem 'newrelic_rpm'
+gem 'oga' # an XML engine is necessary for aws-sdk-s3
 gem 'pg'
 gem 'rake'
 gem 'rapidjson'
