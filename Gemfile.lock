@@ -19,6 +19,7 @@ GEM
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.10.0)
       aws-eventstream (~> 1, >= 1.0.2)
+    bigdecimal (3.1.8)
     honeybadger (5.13.0)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
@@ -66,7 +67,8 @@ GEM
       ansi
       ast
     ruby-progressbar (1.13.0)
-    sequel (5.68.0)
+    sequel (5.87.0)
+      bigdecimal
     sqlite3 (1.7.3-arm64-darwin)
     sqlite3 (1.7.3-x86_64-darwin)
     sqlite3 (1.7.3-x86_64-linux)
