@@ -11,7 +11,7 @@ gem 'pg'
 gem 'rake'
 gem 'rapidjson'
 gem 'sequel'
-gem 'sqlite3', '~> 1.6'
+gem 'sqlite3', '~> 2.4'
 
 group :development, :test do
   gem 'minitest'
