@@ -67,9 +67,9 @@ GEM
       ast
     ruby-progressbar (1.13.0)
     sequel (5.68.0)
-    sqlite3 (1.7.3-arm64-darwin)
-    sqlite3 (1.7.3-x86_64-darwin)
-    sqlite3 (1.7.3-x86_64-linux)
+    sqlite3 (2.4.1-arm64-darwin)
+    sqlite3 (2.4.1-x86_64-darwin)
+    sqlite3 (2.4.1-x86_64-linux-gnu)
     unicode-display_width (2.6.0)
 
 PLATFORMS
@@ -92,7 +92,7 @@ DEPENDENCIES
   rubocop-rake
   rubocop-sequel
   sequel
-  sqlite3 (~> 1.6)
+  sqlite3 (~> 2.4)
 
 BUNDLED WITH
    2.4.18
