@@ -18,7 +18,6 @@ require_relative 'fetchers/tournament/details'
 require_relative 'fetchers/tournament/results'
 require_relative 'fetchers/tournament/rosters'
 require_relative 'standalone/season'
-require_relative 'backup/sqlite'
 require_relative 'backup/postgres'
 require_relative 'exporters/continuity'
 

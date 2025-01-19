@@ -38,12 +38,8 @@
 # Backups: we upload a backup of the two main schemas (public and b) to Cloudflare R2 every day
 25 23 * * * bundle exec rake backup
 
-# Backups: we upload a backup of the two main schemas (public and b) in sqlite to Cloudflare R2 every day
-35 23 * * * bundle exec rake backup_public_to_sqlite
-45 23 * * * bundle exec rake backup_b_to_sqlite
-
 # Vacuuming the database: during import runs, we delete a lot of rows, so the database needs regular vacuuming
-20 23 * * * bundle exec rake vacuum
+0 23 * * * bundle exec rake vacuum
 
 # Wrong team IDs: team IDs are assigned by representatives manually and sometimes need correction
 0 20 * * * bundle exec rake export:continuity
